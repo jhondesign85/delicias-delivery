@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Delícias Delivery</title>
+<style>
+  body{font-family:Arial, sans-serif;margin:0;background:linear-gradient(135deg,#e9d5ff,#6b21a8);}
+  .container{padding:16px;max-width:900px;margin:auto;}
+  h1{color:#fff}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr 1fr}}
+  .card{background:#fff;border-radius:16px;padding:12px;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+  button{background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:8px 12px;cursor:pointer}
+  .box{background:#fff;border-radius:16px;padding:12px;margin-top:16px}
+  input,select{width:100%;padding:8px;margin-top:6px;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Delícias Delivery</h1>
+
+<h2 style="color:#fff">Cardápio do Dia</h2>
+<div id="produtos" class="grid"></div>
+
+<div class="box">
+<h2>Carrinho</h2>
+<ul id="carrinho"></ul>
+<p><b>Total: R$ <span id="total">0</span></b></p>
+
+<input id="nome" placeholder="Seu nome"/>
+<input id="endereco" placeholder="Endereço"/>
+<select id="pagamento">
+<option>Pix</option>
+<option>Dinheiro</option>
+<option>Cartão</option>
+</select>
+
+<button onclick="finalizar()">Enviar Pedido no WhatsApp</button>
+</div>
+
+<div class="box">
+<h2>Cadastrar Produto</h2>
+<input id="novoNome" placeholder="Nome"/>
+<input id="novoPreco" placeholder="Preço"/>
+<button onclick="addProduto()">Adicionar</button>
+<ul id="listaAdmin"></ul>
+</div>
+
+</div>
+
+<script>
+let produtos = [
+{nome:"Arroz com Galinha",preco:18,ativo:true},
+{nome:"Vatapá",preco:16,ativo:true},
+{nome:"Lasanha",preco:20,ativo:true},
+{nome:"Torta Salgada",preco:10,ativo:true},
+{nome:"Misto (Arroz + Vatapá)",preco:22,ativo:true},
+{nome:"Refrigerante",preco:7,ativo:true},
+];
+
+let carrinho=[];
+
+function render(){
+const div=document.getElementById("produtos");
+div.innerHTML="";
+produtos.filter(p=>p.ativo).forEach((p,i)=>{
+div.innerHTML+=`<div class="card">
+<h3>${p.nome}</h3>
+<p>R$ ${p.preco}</p>
+<button onclick="addCarrinho(${i})">Adicionar</button>
+</div>`;
+});
+
+document.getElementById("listaAdmin").innerHTML="";
+produtos.forEach((p,i)=>{
+document.getElementById("listaAdmin").innerHTML+=
+`<li>${p.nome} - ${p.ativo?"Disponível":"Indisponível"} 
+<button onclick="toggle(${i})">Ativar/Desativar</button></li>`;
+});
+}
+
+function addCarrinho(i){
+carrinho.push(produtos[i]);
+updateCarrinho();
+}
+
+function updateCarrinho(){
+let ul=document.getElementById("carrinho");
+ul.innerHTML="";
+let total=0;
+carrinho.forEach(p=>{
+ul.innerHTML+=`<li>${p.nome} - R$ ${p.preco}</li>`;
+total+=p.preco;
+});
+document.getElementById("total").innerText=total;
+}
+
+function finalizar(){
+let nome=document.getElementById("nome").value;
+let endereco=document.getElementById("endereco").value;
+let pagamento=document.getElementById("pagamento").value;
+
+let itens=carrinho.map(i=>"- "+i.nome).join("\n");
+let total=document.getElementById("total").innerText;
+
+let msg=`Olá, gostaria de pedir:\n${itens}\nTotal: R$ ${total}\nNome: ${nome}\nEndereço: ${endereco}\nPagamento: ${pagamento}`;
+
+window.open("https://wa.me/559198312053?text="+encodeURIComponent(msg));
+}
+
+function addProduto(){
+let nome=document.getElementById("novoNome").value;
+let preco=parseFloat(document.getElementById("novoPreco").value);
+if(!nome||!preco)return;
+produtos.push({nome,preco,ativo:true});
+render();
+}
+
+function toggle(i){
+produtos[i].ativo=!produtos[i].ativo;
+render();
+}
+
+render();
+</script>
+</body>
+</html>
