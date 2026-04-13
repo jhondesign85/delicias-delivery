@@ -20,9 +20,9 @@ import {
   ShieldCheck,
   Eye,
   EyeOff,
-  Upload,
+  Palette,
+  Save,
   Image as ImageIcon,
-  Truck,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -33,7 +33,8 @@ const initialProducts = [
     preco: 22.9,
     categoria: "Prato principal",
     descricao: "Arroz temperado com frango desfiado e cheiro-verde.",
-    imagem: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1200&q=80",
+    imagem:
+      "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 2,
@@ -41,7 +42,8 @@ const initialProducts = [
     preco: 18.9,
     categoria: "Regional",
     descricao: "Cremoso, sabor marcante e preparo caseiro.",
-    imagem: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
+    imagem:
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 3,
@@ -49,7 +51,8 @@ const initialProducts = [
     preco: 24.9,
     categoria: "Massas",
     descricao: "Lasanha gratinada, recheada e bem servida.",
-    imagem: "https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=1200&q=80",
+    imagem:
+      "https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 4,
@@ -57,7 +60,8 @@ const initialProducts = [
     preco: 12.9,
     categoria: "Lanches",
     descricao: "Fatia generosa, macia e muito saborosa.",
-    imagem: "https://images.unsplash.com/photo-1464306076886-da185f6a9d05?auto=format&fit=crop&w=1200&q=80",
+    imagem:
+      "https://images.unsplash.com/photo-1464306076886-da185f6a9d05?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 5,
@@ -65,7 +69,8 @@ const initialProducts = [
     preco: 6.5,
     categoria: "Bebidas",
     descricao: "Lata gelada para acompanhar seu pedido.",
-    imagem: "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?auto=format&fit=crop&w=1200&q=80",
+    imagem:
+      "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
@@ -79,8 +84,55 @@ const emptyForm = {
 
 const ADMIN_EMAIL = "leane";
 const ADMIN_PASSWORD = "060923";
-const DEFAULT_WHATSAPP = "559198312053";
-const DEFAULT_SHIPPING = 5;
+
+const defaultSettings = {
+  brandName: "Delícias Delivery",
+  brandSubtitle: "Roxo claro e escuro, elegante e pronto para vender",
+  heroText:
+    "Peça pratos deliciosos com rapidez e praticidade. Cardápio com arroz com galinha, vatapá, lasanha, torta salgada, refrigerante e novos produtos que você pode cadastrar quando quiser.",
+  whatsappNumber: "559198312053",
+  logoUrl: "",
+  themeKey: "roxo",
+};
+
+const themes = {
+  roxo: {
+    page: "from-violet-950 via-purple-950 to-fuchsia-950",
+    soft: "bg-violet-300/20 text-violet-100",
+    button: "bg-violet-400 text-violet-950 hover:bg-violet-300",
+    text: "text-violet-200",
+    muted: "text-violet-100/75",
+    badge: "bg-violet-300/80 text-violet-950",
+    glow: "from-fuchsia-400 to-violet-700 shadow-fuchsia-500/20",
+  },
+  azul: {
+    page: "from-sky-950 via-blue-950 to-cyan-900",
+    soft: "bg-sky-300/20 text-sky-100",
+    button: "bg-sky-400 text-sky-950 hover:bg-sky-300",
+    text: "text-sky-200",
+    muted: "text-sky-100/75",
+    badge: "bg-sky-300/80 text-sky-950",
+    glow: "from-cyan-400 to-sky-700 shadow-cyan-500/20",
+  },
+  vermelho: {
+    page: "from-rose-950 via-red-950 to-orange-900",
+    soft: "bg-rose-300/20 text-rose-100",
+    button: "bg-rose-400 text-rose-950 hover:bg-rose-300",
+    text: "text-rose-200",
+    muted: "text-rose-100/75",
+    badge: "bg-rose-300/80 text-rose-950",
+    glow: "from-orange-400 to-rose-700 shadow-rose-500/20",
+  },
+  verde: {
+    page: "from-emerald-950 via-green-950 to-lime-900",
+    soft: "bg-emerald-300/20 text-emerald-100",
+    button: "bg-emerald-400 text-emerald-950 hover:bg-emerald-300",
+    text: "text-emerald-200",
+    muted: "text-emerald-100/75",
+    badge: "bg-emerald-300/80 text-emerald-950",
+    glow: "from-lime-400 to-emerald-700 shadow-emerald-500/20",
+  },
+};
 
 function currency(value) {
   return new Intl.NumberFormat("pt-BR", {
@@ -93,7 +145,6 @@ export default function DeliciasDeliverySite() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [adminOpen, setAdminOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
@@ -101,16 +152,13 @@ export default function DeliciasDeliverySite() {
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [bannerImage, setBannerImage] = useState("");
-  const [shippingFee, setShippingFee] = useState(DEFAULT_SHIPPING);
-  const [whatsappNumber, setWhatsappNumber] = useState(DEFAULT_WHATSAPP);
+  const [settings, setSettings] = useState(defaultSettings);
+  const [settingsForm, setSettingsForm] = useState(defaultSettings);
 
   useEffect(() => {
     const savedProducts = localStorage.getItem("delicias-delivery-products");
+    const savedSettings = localStorage.getItem("delicias-delivery-settings");
     const adminSession = localStorage.getItem("delicias-delivery-admin-auth");
-    const savedBanner = localStorage.getItem("delicias-delivery-banner");
-    const savedShipping = localStorage.getItem("delicias-delivery-shipping");
-    const savedWhatsapp = localStorage.getItem("delicias-delivery-whatsapp");
 
     if (savedProducts) {
       setProducts(JSON.parse(savedProducts));
@@ -118,20 +166,14 @@ export default function DeliciasDeliverySite() {
       setProducts(initialProducts);
     }
 
+    if (savedSettings) {
+      const parsed = JSON.parse(savedSettings);
+      setSettings(parsed);
+      setSettingsForm(parsed);
+    }
+
     if (adminSession === "true") {
       setAdminLogged(true);
-    }
-
-    if (savedBanner) {
-      setBannerImage(savedBanner);
-    }
-
-    if (savedShipping) {
-      setShippingFee(Number(savedShipping));
-    }
-
-    if (savedWhatsapp) {
-      setWhatsappNumber(savedWhatsapp);
     }
   }, []);
 
@@ -142,41 +184,26 @@ export default function DeliciasDeliverySite() {
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem("delicias-delivery-banner", bannerImage);
-  }, [bannerImage]);
+    localStorage.setItem("delicias-delivery-settings", JSON.stringify(settings));
+  }, [settings]);
 
-  useEffect(() => {
-    localStorage.setItem("delicias-delivery-shipping", String(shippingFee));
-  }, [shippingFee]);
-
-  useEffect(() => {
-    localStorage.setItem("delicias-delivery-whatsapp", whatsappNumber);
-  }, [whatsappNumber]);
-
-  const categories = useMemo(() => {
-    const unique = [...new Set(products.map((item) => item.categoria))];
-    return ["Todos", ...unique];
-  }, [products]);
+  const activeTheme = themes[settings.themeKey] || themes.roxo;
 
   const filteredProducts = useMemo(() => {
     const term = search.toLowerCase().trim();
-    return products.filter((item) => {
-      const matchesCategory = selectedCategory === "Todos" || item.categoria === selectedCategory;
-      const matchesSearch =
-        !term ||
+    if (!term) return products;
+    return products.filter(
+      (item) =>
         item.nome.toLowerCase().includes(term) ||
         item.categoria.toLowerCase().includes(term) ||
-        item.descricao.toLowerCase().includes(term);
-      return matchesCategory && matchesSearch;
-    });
-  }, [products, search, selectedCategory]);
+        item.descricao.toLowerCase().includes(term)
+    );
+  }, [products, search]);
 
-  const subtotalCart = useMemo(
+  const totalCart = useMemo(
     () => cart.reduce((acc, item) => acc + item.preco * item.quantidade, 0),
     [cart]
   );
-
-  const totalCart = subtotalCart + (cart.length ? shippingFee : 0);
 
   function addToCart(product) {
     setCart((prev) => {
@@ -204,6 +231,14 @@ export default function DeliciasDeliverySite() {
 
   function handleChange(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function handleSettingsChange(field, value) {
+    setSettingsForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function saveSettings() {
+    setSettings(settingsForm);
   }
 
   function resetForm() {
@@ -279,70 +314,43 @@ export default function DeliciasDeliverySite() {
     localStorage.removeItem("delicias-delivery-admin-auth");
   }
 
-  function handleImageUpload(event, setter) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      setter(String(reader.result || ""));
-    };
-    reader.readAsDataURL(file);
-  }
-
   const whatsappText = encodeURIComponent(
-    `Olá! Quero fazer um pedido na Delícias Delivery:
-${cart
+    `Olá! Quero fazer um pedido na ${settings.brandName}:\n${cart
       .map((item) => `- ${item.nome} x${item.quantidade} = ${currency(item.preco * item.quantidade)}`)
-      .join("
-")}
-
-Subtotal: ${currency(subtotalCart)}
-Taxa de entrega: ${currency(cart.length ? shippingFee : 0)}
-Total: ${currency(totalCart)}`
+      .join("\n")}\n\nTotal: ${currency(totalCart)}`
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-violet-950 via-purple-950 to-fuchsia-950 text-white">
+    <div className={`min-h-screen bg-gradient-to-b ${activeTheme.page} text-white`}>
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(216,180,254,0.25),transparent_30%),radial-gradient(circle_at_top_left,rgba(192,132,252,0.18),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_30%),radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_35%)]" />
         <div className="relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
-          <div className="mb-6 overflow-hidden rounded-[32px] border border-white/10 bg-white/10 shadow-2xl backdrop-blur-md">
-            {bannerImage ? (
-              <img src={bannerImage} alt="Banner principal" className="h-52 w-full object-cover md:h-72" />
-            ) : (
-              <div className="flex h-52 w-full items-center justify-center bg-gradient-to-r from-violet-600/30 to-fuchsia-600/30 md:h-72">
-                <div className="text-center">
-                  <p className="text-sm uppercase tracking-[0.3em] text-violet-200">Banner principal</p>
-                  <h2 className="mt-2 text-3xl font-black md:text-5xl">Delícias Delivery</h2>
-                  <p className="mt-3 text-violet-100/80">Envios rápidos, pratos saborosos e atendimento no WhatsApp.</p>
-                </div>
-              </div>
-            )}
-          </div>
-
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
-              <Badge className="mb-4 border-0 bg-violet-300/20 px-4 py-1 text-violet-100">
+              <Badge className={`mb-4 border-0 px-4 py-1 ${activeTheme.soft}`}>
                 Delivery moderno • sabor caseiro
               </Badge>
+
               <div className="flex items-center gap-3">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-400 to-violet-700 shadow-2xl shadow-fuchsia-500/20">
-                  <Store className="h-7 w-7" />
+                <div className={`flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br ${activeTheme.glow} shadow-2xl`}>
+                  {settings.logoUrl ? (
+                    <img src={settings.logoUrl} alt={settings.brandName} className="h-full w-full object-cover" />
+                  ) : (
+                    <Store className="h-7 w-7" />
+                  )}
                 </div>
                 <div>
-                  <h1 className="text-3xl font-black tracking-tight md:text-5xl">Delícias Delivery</h1>
-                  <p className="text-sm text-violet-200 md:text-base">Roxo claro e escuro, elegante e pronto para vender</p>
+                  <h1 className="text-3xl font-black tracking-tight md:text-5xl">{settings.brandName}</h1>
+                  <p className={`text-sm md:text-base ${activeTheme.text}`}>{settings.brandSubtitle}</p>
                 </div>
               </div>
 
-              <p className="mt-5 max-w-xl text-sm leading-6 text-violet-100/80 md:text-base">
-                Peça pratos deliciosos com rapidez e praticidade. Cardápio com arroz com galinha,
-                vatapá, lasanha, torta salgada, refrigerante e novos produtos que você pode cadastrar quando quiser.
+              <p className="mt-5 max-w-xl text-sm leading-6 text-white/80 md:text-base">
+                {settings.heroText}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button className="rounded-2xl bg-violet-400 px-6 text-violet-950 hover:bg-violet-300">
+                <Button className={`rounded-2xl px-6 ${activeTheme.button}`}>
                   Ver cardápio
                 </Button>
 
@@ -350,76 +358,105 @@ Total: ${currency(totalCart)}`
                   <>
                     <Dialog open={adminOpen} onOpenChange={setAdminOpen}>
                       <DialogTrigger asChild>
-                        <Button variant="outline" className="rounded-2xl border-violet-300/40 bg-white/5 px-6 text-white hover:bg-white/10">
+                        <Button variant="outline" className="rounded-2xl border-white/20 bg-white/5 px-6 text-white hover:bg-white/10">
                           <ShieldCheck className="mr-2 h-4 w-4" /> Painel administrativo
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-h-[90vh] overflow-y-auto border-white/10 bg-slate-950 text-white sm:max-w-4xl">
+                      <DialogContent className="max-h-[90vh] overflow-y-auto border-white/10 bg-slate-950 text-white sm:max-w-5xl">
                         <DialogHeader>
-                          <DialogTitle className="text-2xl font-bold">
-                            {editingId ? "Editar produto" : "Cadastrar novo produto"}
-                          </DialogTitle>
+                          <DialogTitle className="text-2xl font-bold">Painel administrativo</DialogTitle>
                         </DialogHeader>
 
                         <div className="grid gap-6 lg:grid-cols-2">
                           <div className="space-y-6">
-                            <form onSubmit={handleSubmit} className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 md:grid-cols-2">
-                              <div className="space-y-2">
-                                <label className="text-sm text-violet-200">Nome do produto</label>
-                                <Input value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: Strogonoff" />
+                            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+                              <div className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                                <Plus className="h-5 w-5" /> {editingId ? "Editar produto" : "Cadastrar novo produto"}
                               </div>
-                              <div className="space-y-2">
-                                <label className="text-sm text-violet-200">Preço</label>
-                                <Input value={form.preco} onChange={(e) => handleChange("preco", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: 19.90" type="number" step="0.01" />
-                              </div>
-                              <div className="space-y-2">
-                                <label className="text-sm text-violet-200">Categoria</label>
-                                <Input value={form.categoria} onChange={(e) => handleChange("categoria", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: Prato executivo" />
-                              </div>
-                              <div className="space-y-2">
-                                <label className="text-sm text-violet-200">Upload da imagem</label>
-                                <Input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, (value) => handleChange("imagem", value))} className="border-white/10 bg-white/10 file:text-white" />
-                              </div>
-                              <div className="space-y-2 md:col-span-2">
-                                <label className="text-sm text-violet-200">Descrição</label>
-                                <Textarea value={form.descricao} onChange={(e) => handleChange("descricao", e.target.value)} className="min-h-[100px] border-white/10 bg-white/10" placeholder="Descreva o produto" />
-                              </div>
-                              {form.imagem ? (
-                                <div className="md:col-span-2 overflow-hidden rounded-2xl border border-white/10">
-                                  <img src={form.imagem} alt="Prévia do produto" className="h-44 w-full object-cover" />
+                              <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
+                                <div className="space-y-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Nome do produto</label>
+                                  <Input value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: Strogonoff" />
                                 </div>
-                              ) : null}
-                              <div className="md:col-span-2 flex flex-wrap gap-3">
-                                <Button type="submit" className="rounded-2xl bg-violet-400 text-violet-950 hover:bg-violet-300">
-                                  {editingId ? "Salvar alterações" : "Adicionar produto"}
-                                </Button>
-                                <Button type="button" variant="outline" onClick={resetForm} className="rounded-2xl border-white/15 bg-transparent text-white hover:bg-white/10">
-                                  Limpar
-                                </Button>
-                              </div>
-                            </form>
+                                <div className="space-y-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Preço</label>
+                                  <Input value={form.preco} onChange={(e) => handleChange("preco", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: 19.90" type="number" step="0.01" />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Categoria</label>
+                                  <Input value={form.categoria} onChange={(e) => handleChange("categoria", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: Prato executivo" />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>URL da imagem</label>
+                                  <Input value={form.imagem} onChange={(e) => handleChange("imagem", e.target.value)} className="border-white/10 bg-white/10" placeholder="Cole o link da foto" />
+                                </div>
+                                <div className="space-y-2 md:col-span-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Descrição</label>
+                                  <Textarea value={form.descricao} onChange={(e) => handleChange("descricao", e.target.value)} className="min-h-[100px] border-white/10 bg-white/10" placeholder="Descreva o produto" />
+                                </div>
+                                <div className="md:col-span-2 flex flex-wrap gap-3">
+                                  <Button type="submit" className={`rounded-2xl ${activeTheme.button}`}>
+                                    {editingId ? "Salvar alterações" : "Adicionar produto"}
+                                  </Button>
+                                  <Button type="button" variant="outline" onClick={resetForm} className="rounded-2xl border-white/15 bg-transparent text-white hover:bg-white/10">
+                                    Limpar
+                                  </Button>
+                                </div>
+                              </form>
+                            </div>
 
-                            <div className="rounded-3xl border border-white/10 bg-white/5 p-4 space-y-4">
-                              <div className="flex items-center gap-2 text-lg font-semibold">
-                                <Truck className="h-5 w-5" /> Configurações da loja
+                            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+                              <div className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                                <Palette className="h-5 w-5" /> Personalização do site
                               </div>
-                              <div className="space-y-2">
-                                <label className="text-sm text-violet-200">Taxa de entrega</label>
-                                <Input value={shippingFee} onChange={(e) => setShippingFee(Number(e.target.value || 0))} type="number" step="0.01" className="border-white/10 bg-white/10" />
-                              </div>
-                              <div className="space-y-2">
-                                <label className="text-sm text-violet-200">WhatsApp</label>
-                                <Input value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} className="border-white/10 bg-white/10" />
-                              </div>
-                              <div className="space-y-2">
-                                <label className="text-sm text-violet-200">Banner principal</label>
-                                <Input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setBannerImage)} className="border-white/10 bg-white/10 file:text-white" />
-                              </div>
-                              {bannerImage ? (
-                                <div className="overflow-hidden rounded-2xl border border-white/10">
-                                  <img src={bannerImage} alt="Prévia do banner" className="h-40 w-full object-cover" />
+                              <div className="grid gap-4 md:grid-cols-2">
+                                <div className="space-y-2 md:col-span-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Nome da loja</label>
+                                  <Input value={settingsForm.brandName} onChange={(e) => handleSettingsChange("brandName", e.target.value)} className="border-white/10 bg-white/10" />
                                 </div>
-                              ) : null}
+                                <div className="space-y-2 md:col-span-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Subtítulo</label>
+                                  <Input value={settingsForm.brandSubtitle} onChange={(e) => handleSettingsChange("brandSubtitle", e.target.value)} className="border-white/10 bg-white/10" />
+                                </div>
+                                <div className="space-y-2 md:col-span-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Texto principal</label>
+                                  <Textarea value={settingsForm.heroText} onChange={(e) => handleSettingsChange("heroText", e.target.value)} className="min-h-[110px] border-white/10 bg-white/10" />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>WhatsApp</label>
+                                  <Input value={settingsForm.whatsappNumber} onChange={(e) => handleSettingsChange("whatsappNumber", e.target.value.replace(/\D/g, ""))} className="border-white/10 bg-white/10" placeholder="559198312053" />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Logo por URL</label>
+                                  <Input value={settingsForm.logoUrl} onChange={(e) => handleSettingsChange("logoUrl", e.target.value)} className="border-white/10 bg-white/10" placeholder="Cole o link da logo" />
+                                </div>
+                                <div className="space-y-2 md:col-span-2">
+                                  <label className={`text-sm ${activeTheme.text}`}>Tema</label>
+                                  <div className="flex flex-wrap gap-2">
+                                    {[
+                                      { key: "roxo", label: "Roxo" },
+                                      { key: "azul", label: "Azul" },
+                                      { key: "vermelho", label: "Vermelho" },
+                                      { key: "verde", label: "Verde" },
+                                    ].map((theme) => (
+                                      <Button
+                                        key={theme.key}
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => handleSettingsChange("themeKey", theme.key)}
+                                        className={`rounded-2xl border-white/15 bg-transparent text-white hover:bg-white/10 ${settingsForm.themeKey === theme.key ? "ring-2 ring-white/40" : ""}`}
+                                      >
+                                        {theme.label}
+                                      </Button>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div className="md:col-span-2">
+                                  <Button type="button" onClick={saveSettings} className={`rounded-2xl ${activeTheme.button}`}>
+                                    <Save className="mr-2 h-4 w-4" /> Salvar personalização
+                                  </Button>
+                                </div>
+                              </div>
                             </div>
                           </div>
 
@@ -428,14 +465,14 @@ Total: ${currency(totalCart)}`
                               <div className="mb-4 flex items-center gap-2 text-lg font-semibold">
                                 <ImageIcon className="h-5 w-5" /> Produtos cadastrados
                               </div>
-                              <div className="grid gap-3 max-h-[70vh] overflow-y-auto pr-1">
+                              <div className="grid max-h-[70vh] gap-3 overflow-y-auto pr-1">
                                 {products.map((product) => (
                                   <div key={product.id} className="flex flex-col gap-3 rounded-3xl border border-white/10 bg-white/5 p-3 md:flex-row md:items-center md:justify-between">
                                     <div className="flex items-center gap-3">
                                       <img src={product.imagem} alt={product.nome} className="h-16 w-16 rounded-2xl object-cover" />
                                       <div>
                                         <p className="font-semibold">{product.nome}</p>
-                                        <p className="text-sm text-violet-200">{product.categoria} • {currency(product.preco)}</p>
+                                        <p className={`text-sm ${activeTheme.text}`}>{product.categoria} • {currency(product.preco)}</p>
                                       </div>
                                     </div>
                                     <div className="flex gap-2">
@@ -462,7 +499,7 @@ Total: ${currency(totalCart)}`
                 ) : (
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" className="rounded-2xl border-violet-300/40 bg-white/5 px-6 text-white hover:bg-white/10">
+                      <Button variant="outline" className="rounded-2xl border-white/20 bg-white/5 px-6 text-white hover:bg-white/10">
                         <Lock className="mr-2 h-4 w-4" /> Acesso do administrador
                       </Button>
                     </DialogTrigger>
@@ -472,11 +509,11 @@ Total: ${currency(totalCart)}`
                       </DialogHeader>
 
                       <form onSubmit={handleAdminLogin} className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-4">
-                        <div className="rounded-2xl border border-violet-300/20 bg-violet-400/10 p-3 text-sm text-violet-100">
+                        <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white/80">
                           Use seu acesso para liberar somente o painel administrativo.
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm text-violet-200">Usuário</label>
+                          <label className={`text-sm ${activeTheme.text}`}>Usuário</label>
                           <Input
                             type="text"
                             value={loginForm.email}
@@ -486,7 +523,7 @@ Total: ${currency(totalCart)}`
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm text-violet-200">Senha</label>
+                          <label className={`text-sm ${activeTheme.text}`}>Senha</label>
                           <div className="flex gap-2">
                             <Input
                               type={showPassword ? "text" : "password"}
@@ -511,7 +548,7 @@ Total: ${currency(totalCart)}`
                           Acesso do admin: <strong>{ADMIN_EMAIL}</strong> • Senha: <strong>{ADMIN_PASSWORD}</strong>
                         </div>
 
-                        <Button type="submit" className="w-full rounded-2xl bg-violet-400 text-violet-950 hover:bg-violet-300">
+                        <Button type="submit" className={`w-full rounded-2xl ${activeTheme.button}`}>
                           <ShieldCheck className="mr-2 h-4 w-4" /> Entrar no painel
                         </Button>
                       </form>
@@ -531,13 +568,13 @@ Total: ${currency(totalCart)}`
                 { icon: Star, title: "Cardápio bonito", text: "Visual moderno e atrativo" },
                 { icon: Clock3, title: "Pedido rápido", text: "Experiência simples no celular" },
                 { icon: Phone, title: "Venda fácil", text: "Pronto para WhatsApp" },
-                { icon: MapPin, title: "Gestão completa", text: "Banner, frete e produtos" },
+                { icon: MapPin, title: "Gestão completa", text: "Edite produtos, tema e logo" },
               ].map((item, index) => (
                 <Card key={index} className="rounded-3xl border-white/10 bg-white/10 text-white shadow-2xl backdrop-blur-sm">
                   <CardContent className="p-5">
-                    <item.icon className="mb-3 h-6 w-6 text-violet-200" />
+                    <item.icon className={`mb-3 h-6 w-6 ${activeTheme.text}`} />
                     <h3 className="font-semibold">{item.title}</h3>
-                    <p className="mt-1 text-sm text-violet-100/75">{item.text}</p>
+                    <p className={`mt-1 text-sm ${activeTheme.muted}`}>{item.text}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -550,30 +587,16 @@ Total: ${currency(totalCart)}`
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="text-2xl font-bold md:text-3xl">Nosso cardápio</h2>
-            <p className="text-violet-200/80">Produtos iniciais e espaço para você adicionar novos itens</p>
+            <p className={`${activeTheme.text}/80`}>Produtos iniciais e espaço para você adicionar novos itens</p>
           </div>
           <div className="w-full md:max-w-sm">
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar produto, categoria ou descrição"
-              className="rounded-2xl border-white/10 bg-white/10 text-white placeholder:text-violet-200/60"
+              className="rounded-2xl border-white/10 bg-white/10 text-white placeholder:text-white/50"
             />
           </div>
-        </div>
-
-        <div className="mb-6 flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <Button
-              key={category}
-              type="button"
-              variant="outline"
-              onClick={() => setSelectedCategory(category)}
-              className={`rounded-2xl border-white/15 text-white hover:bg-white/10 ${selectedCategory === category ? "bg-violet-400 text-violet-950 hover:bg-violet-300" : "bg-white/5"}`}
-            >
-              {category}
-            </Button>
-          ))}
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
@@ -588,18 +611,18 @@ Total: ${currency(totalCart)}`
                 <div className="relative h-56 overflow-hidden">
                   <img src={product.imagem} alt={product.nome} className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent" />
-                  <Badge className="absolute left-4 top-4 border-0 bg-violet-300/80 text-violet-950">{product.categoria}</Badge>
+                  <Badge className={`absolute left-4 top-4 border-0 ${activeTheme.badge}`}>{product.categoria}</Badge>
                 </div>
                 <CardContent className="p-5">
                   <div className="mb-3 flex items-start justify-between gap-4">
                     <div>
                       <h3 className="text-xl font-bold">{product.nome}</h3>
-                      <p className="mt-1 text-sm text-violet-100/75">{product.descricao}</p>
+                      <p className={`mt-1 text-sm ${activeTheme.muted}`}>{product.descricao}</p>
                     </div>
-                    <span className="whitespace-nowrap text-lg font-black text-violet-200">{currency(product.preco)}</span>
+                    <span className={`whitespace-nowrap text-lg font-black ${activeTheme.text}`}>{currency(product.preco)}</span>
                   </div>
                   <div className="flex gap-3">
-                    <Button onClick={() => addToCart(product)} className="flex-1 rounded-2xl bg-violet-400 text-violet-950 hover:bg-violet-300">
+                    <Button onClick={() => addToCart(product)} className={`flex-1 rounded-2xl ${activeTheme.button}`}>
                       <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar
                     </Button>
                     {adminLogged ? (
@@ -618,14 +641,13 @@ Total: ${currency(totalCart)}`
       <section className="sticky bottom-0 border-t border-white/10 bg-slate-950/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
           <div>
-            <p className="text-sm text-violet-200">Carrinho</p>
+            <p className={`text-sm ${activeTheme.text}`}>Carrinho</p>
             <h3 className="text-xl font-bold">{cart.reduce((acc, item) => acc + item.quantidade, 0)} itens • {currency(totalCart)}</h3>
-            <p className="text-sm text-violet-100/70">Subtotal: {currency(subtotalCart)} • Taxa de entrega: {currency(cart.length ? shippingFee : 0)}</p>
           </div>
 
           <div className="flex flex-wrap gap-2">
             {cart.length === 0 ? (
-              <span className="text-sm text-violet-200/75">Adicione produtos para começar um pedido.</span>
+              <span className="text-sm text-white/75">Adicione produtos para começar um pedido.</span>
             ) : (
               cart.map((item) => (
                 <div key={item.id} className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-2 text-sm">
@@ -637,10 +659,10 @@ Total: ${currency(totalCart)}`
           </div>
 
           <a
-            href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`}
+            href={`https://wa.me/${settings.whatsappNumber}?text=${whatsappText}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-2xl bg-violet-400 px-6 py-3 font-semibold text-violet-950 transition hover:bg-violet-300"
+            className={`inline-flex items-center justify-center rounded-2xl px-6 py-3 font-semibold transition ${activeTheme.button}`}
           >
             Finalizar no WhatsApp
           </a>
