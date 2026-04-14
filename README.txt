@@ -1,16 +1,16 @@
-Delícias Delivery
+Delícias Delivery - versão HTML
 
-Arquivos:
-- index.html
+Conteúdo:
+- delicias_index.html
 
 Como publicar no GitHub e Netlify:
-1. Envie o arquivo index.html para o seu repositório no GitHub.
-2. Na Netlify, conecte o repositório.
-3. Use estas configurações:
+1. Extraia este ZIP.
+2. Renomeie delicias_index.html para index.html.
+3. Envie para o GitHub.
+4. Na Netlify use:
    - Base directory: vazio
    - Build command: vazio
    - Publish directory: .
-4. Faça o deploy.
 
 Login admin:
 - usuário: leane
