@@ -1,17 +1,19 @@
-Delícias Delivery - versão HTML
+Delícias Delivery - versão HTML com URL pública
 
 Conteúdo:
-- delicias_index.html
+- delicias_index_url_publica.html
 
-Como publicar no GitHub e Netlify:
-1. Extraia este ZIP.
-2. Renomeie delicias_index.html para index.html.
-3. Envie para o GitHub.
-4. Na Netlify use:
-   - Base directory: vazio
-   - Build command: vazio
-   - Publish directory: .
+Antes de subir no GitHub:
+- renomeie delicias_index_url_publica.html para index.html
+
+Na Netlify use:
+- Base directory: vazio
+- Build command: vazio
+- Publish directory: .
 
 Login admin:
 - usuário: leane
 - senha: 060923
+
+Importante:
+- As imagens devem ser URL pública.
