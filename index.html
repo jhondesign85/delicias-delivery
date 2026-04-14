@@ -6,218 +6,69 @@
   <title>Delícias Delivery</title>
   <style>
     :root{
-      --bg1:#2e1065;
-      --bg2:#3b0764;
-      --bg3:#4a044e;
-      --card:rgba(255,255,255,.08);
-      --border:rgba(255,255,255,.12);
-      --text:#fff;
-      --muted:#ddd6fe;
-      --accent:#c084fc;
-      --accent-dark:#6d28d9;
-      --danger:#ef4444;
-      --warn:#f59e0b;
-      --shadow:0 18px 36px rgba(0,0,0,.28);
-      --fallback-img:https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80;
+      --bg1:#2e1065; --bg2:#3b0764; --bg3:#4a044e;
+      --card:rgba(255,255,255,.08); --border:rgba(255,255,255,.12);
+      --text:#fff; --muted:#ddd6fe; --accent:#c084fc;
+      --danger:#ef4444; --warn:#f59e0b; --shadow:0 18px 36px rgba(0,0,0,.28);
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Arial,Helvetica,sans-serif;
-      color:var(--text);
-      background:linear-gradient(180deg,var(--bg1),var(--bg2),var(--bg3));
-      min-height:100vh;
-    }
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:linear-gradient(180deg,var(--bg1),var(--bg2),var(--bg3));min-height:100vh}
     .container{max-width:1200px;margin:0 auto;padding:20px}
-    .glass{
-      background:var(--card);
-      border:1px solid var(--border);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-    }
-    .banner{
-      border-radius:28px;
-      overflow:hidden;
-      min-height:220px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin-bottom:14px;
-    }
+    .glass{background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+    .banner{border-radius:28px;overflow:hidden;min-height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
     .banner img{width:100%;height:280px;object-fit:cover;display:block}
     .banner-fallback{padding:40px;text-align:center}
-    .banner-fallback .kicker{
-      margin:0;
-      color:#ddd6fe;
-      text-transform:uppercase;
-      letter-spacing:.3em;
-      font-size:12px;
-    }
+    .banner-fallback p{margin:0;color:#ddd6fe;text-transform:uppercase;letter-spacing:.3em;font-size:12px}
     .banner-fallback h1{margin:10px 0 8px;font-size:52px}
-    .banner-fallback p{margin:0;color:rgba(255,255,255,.82)}
-    .adminbar{
-      margin:0 0 18px auto;
-      padding:8px 10px;
-      border-radius:16px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      width:fit-content;
-    }
-    .btn{
-      border:none;
-      border-radius:12px;
-      padding:9px 12px;
-      cursor:pointer;
-      font-weight:700;
-      transition:.2s;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:12px;
-    }
+    .banner-fallback .sub{margin:0;color:rgba(255,255,255,.82);text-transform:none;letter-spacing:normal;font-size:16px}
+    .adminbar{margin:0 0 18px auto;padding:8px 10px;border-radius:16px;display:flex;gap:8px;flex-wrap:wrap;width:fit-content}
+    .btn{border:none;border-radius:12px;padding:9px 12px;cursor:pointer;font-weight:700;transition:.2s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
     .btn:hover{transform:translateY(-1px)}
     .btn-primary{background:var(--accent);color:#2e1065}
     .btn-secondary{background:rgba(255,255,255,.06);color:#fff;border:1px solid var(--border)}
     .btn-danger{background:rgba(239,68,68,.16);color:#fff;border:1px solid rgba(239,68,68,.24)}
     .btn-warn{background:var(--warn);color:#111827}
     .btn-small{padding:8px 11px;font-size:13px}
-    .catalog-header{
-      display:flex;
-      justify-content:space-between;
-      gap:14px;
-      align-items:end;
-      margin:10px 0 16px;
-      flex-wrap:wrap;
-    }
+    .catalog-header{display:flex;justify-content:space-between;gap:14px;align-items:end;margin:10px 0 16px;flex-wrap:wrap}
     h2{margin:0 0 6px}
     .muted{color:rgba(255,255,255,.78)}
-    .input,.textarea{
-      width:100%;
-      background:rgba(255,255,255,.08);
-      color:#fff;
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:12px 14px;
-      outline:none;
-    }
+    .input,.textarea{width:100%;background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--border);border-radius:16px;padding:12px 14px;outline:none}
     .textarea{min-height:100px;resize:vertical}
     .input::placeholder,.textarea::placeholder{color:rgba(255,255,255,.55)}
     .chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-    .chip{
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      padding:10px 14px;
-      border-radius:18px;
-      cursor:pointer;
-      border:1px solid var(--border);
-    }
+    .chip{background:rgba(255,255,255,.06);color:#fff;padding:10px 14px;border-radius:18px;cursor:pointer;border:1px solid var(--border)}
     .chip.active{background:var(--accent);color:#2e1065}
-    .products{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:18px;
-    }
+    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
     .product-card{border-radius:28px;overflow:hidden}
     .product-image{position:relative}
     .product-card img{width:100%;height:220px;object-fit:cover;display:block}
-    .cat-badge{
-      position:absolute;
-      top:14px;
-      left:14px;
-      background:rgba(192,132,252,.9);
-      color:#2e1065;
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:700;
-    }
+    .cat-badge{position:absolute;top:14px;left:14px;background:rgba(192,132,252,.9);color:#2e1065;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:700}
     .product-body{padding:16px}
     .product-top{display:flex;justify-content:space-between;gap:10px}
     .price{font-size:22px;font-weight:800;color:#ddd6fe}
     .actions{display:flex;gap:10px;margin-top:14px}
-    .sticky-cart{
-      position:sticky;
-      bottom:0;
-      border-top:1px solid var(--border);
-      padding:16px;
-      margin-top:24px;
-      border-radius:24px 24px 0 0;
-      z-index:10;
-    }
+    .sticky-cart{position:sticky;bottom:0;border-top:1px solid var(--border);padding:16px;margin-top:24px;border-radius:24px 24px 0 0;z-index:10}
     .cart-row{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
     .cart-pills{display:flex;gap:8px;flex-wrap:wrap}
-    .cart-pill{
-      background:rgba(255,255,255,.08);
-      padding:10px 12px;
-      border-radius:18px;
-      border:1px solid var(--border);
-    }
-    .modal{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.65);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      z-index:99;
-    }
+    .cart-pill{background:rgba(255,255,255,.08);padding:10px 12px;border-radius:18px;border:1px solid var(--border)}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:16px;z-index:99}
     .modal.show{display:flex}
-    .panel{
-      width:min(1100px,100%);
-      max-height:90vh;
-      overflow:auto;
-      border-radius:28px;
-      padding:18px;
-      background:#0f172a;
-      border:1px solid var(--border);
-      box-shadow:var(--shadow);
-    }
+    .panel{width:min(1100px,100%);max-height:90vh;overflow:auto;border-radius:28px;padding:18px;background:#0f172a}
     .login-box{max-width:430px}
     .section-title{font-size:22px;font-weight:800;margin:4px 0 16px}
     .panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    .panel-block{
-      background:rgba(255,255,255,.05);
-      border:1px solid var(--border);
-      border-radius:24px;
-      padding:16px;
-    }
+    .panel-block{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:24px;padding:16px}
     .field{margin-bottom:12px}
     .field label{display:block;margin-bottom:6px;color:#ddd6fe;font-size:14px}
-    .preview{
-      margin-top:12px;
-      border-radius:18px;
-      overflow:hidden;
-      border:1px solid var(--border);
-    }
+    .preview{margin-top:12px;border-radius:18px;overflow:hidden;border:1px solid var(--border)}
     .preview img{width:100%;height:180px;object-fit:cover;display:block}
-    .notice{
-      padding:12px 14px;
-      border-radius:16px;
-      background:rgba(245,158,11,.12);
-      border:1px solid rgba(245,158,11,.25);
-      color:#fde68a;
-      font-size:14px;
-    }
+    .notice{padding:12px 14px;border-radius:16px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#fde68a;font-size:14px}
     .admin-list{display:grid;gap:10px}
-    .admin-item{
-      border-radius:22px;
-      padding:12px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:center;
-    }
+    .admin-item{border-radius:22px;padding:12px;display:flex;justify-content:space-between;gap:12px;align-items:center}
     .admin-left{display:flex;gap:12px;align-items:center}
     .admin-left img{width:62px;height:62px;border-radius:16px;object-fit:cover}
-    @media (max-width:900px){
-      .panel-grid{grid-template-columns:1fr}
-      .banner img{height:220px}
-      .banner-fallback h1{font-size:40px}
-      .adminbar{width:100%;justify-content:flex-end}
-    }
+    .status{margin-bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--border);font-size:13px}
+    @media (max-width:900px){.panel-grid{grid-template-columns:1fr}.banner img{height:220px}.banner-fallback h1{font-size:40px}.adminbar{width:100%;justify-content:flex-end}}
   </style>
 </head>
 <body>
@@ -234,7 +85,7 @@
       <div class="catalog-header">
         <div>
           <h2>Nosso cardápio</h2>
-          <div class="muted">Produtos iniciais e espaço para você adicionar novos itens</div>
+          <div class="muted">Produtos em tempo real com Firebase</div>
         </div>
         <div style="width:min(100%,340px)">
           <input class="input" id="searchInput" placeholder="Buscar produto, categoria ou descrição">
@@ -265,7 +116,8 @@
           <div class="field"><label>Usuário</label><input class="input" id="loginUser" placeholder="leane"></div>
           <div class="field"><label>Senha</label><input class="input" id="loginPass" type="password" placeholder="Digite sua senha"></div>
           <div id="loginError" style="display:none;color:#fecaca;margin-bottom:10px"></div>
-          <div class="row">
+          <div class="notice">Esse login é só uma trava visual no frontend. Para uso real, proteja regras no Firebase.</div>
+          <div class="row" style="margin-top:12px">
             <button class="btn btn-primary" type="submit">Entrar</button>
             <button class="btn btn-secondary" type="button" onclick="closeLogin()">Fechar</button>
           </div>
@@ -277,15 +129,16 @@
   <div class="modal" id="adminModal">
     <div class="panel">
       <div class="section-title" id="adminTitle">Cadastrar novo produto</div>
+      <div id="statusBox" class="status">Preencha Firebase e Cloudinary no código antes de publicar.</div>
       <div class="panel-grid">
         <div>
           <form onsubmit="saveProduct(event)" class="panel-block">
             <div class="field"><label>Nome do produto</label><input class="input" id="prodNome" placeholder="Ex: Strogonoff"></div>
             <div class="field"><label>Preço</label><input class="input" id="prodPreco" type="number" step="0.01" placeholder="Ex: 19.90"></div>
             <div class="field"><label>Categoria</label><input class="input" id="prodCategoria" placeholder="Ex: Prato executivo"></div>
-            <div class="field"><label>URL pública da imagem</label><input class="input" id="prodImagemUrl" placeholder="https://..."></div>
+            <div class="field"><label>Selecionar imagem</label><input class="input" id="prodImagemFile" type="file" accept="image/*"></div>
             <div class="field"><label>Descrição</label><textarea class="textarea" id="prodDescricao" placeholder="Descreva o produto"></textarea></div>
-            <div class="notice">Use URL pública da imagem. Isso faz a foto aparecer para todos os clientes.</div>
+            <div class="notice">A imagem sobe para o Cloudinary e a URL é salva no Firebase.</div>
             <div class="preview" id="prodPreview" style="display:none"><img id="prodPreviewImg" alt="Prévia do produto"></div>
             <div class="row" style="margin-top:12px">
               <button class="btn btn-primary" type="submit">Salvar produto</button>
@@ -297,8 +150,8 @@
             <div class="section-title" style="font-size:20px">Configurações da loja</div>
             <div class="field"><label>Taxa de entrega</label><input class="input" id="shippingFee" type="number" step="0.01"></div>
             <div class="field"><label>WhatsApp</label><input class="input" id="whatsappNumber"></div>
-            <div class="field"><label>URL pública do banner</label><input class="input" id="bannerUrl" placeholder="https://..."></div>
-            <div class="notice">O banner também precisa ser URL pública para aparecer para todos.</div>
+            <div class="field"><label>Selecionar banner</label><input class="input" id="bannerFile" type="file" accept="image/*"></div>
+            <div class="notice">O banner também sobe para o Cloudinary antes de salvar no Firebase.</div>
             <div class="preview" id="bannerPreview" style="display:none"><img id="bannerPreviewImg" alt="Prévia do banner"></div>
             <div class="row" style="margin-top:12px">
               <button class="btn btn-primary" type="button" onclick="saveStoreSettings()">Salvar configurações</button>
@@ -315,30 +168,48 @@
     </div>
   </div>
 
-  <script>
-    const ADMIN_USER = "leane";
-    const ADMIN_PASSWORD = "060923";
-    const DEFAULT_WHATSAPP = "559198312053";
-    const DEFAULT_SHIPPING = 5;
-    const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import {
+      getFirestore, collection, doc, setDoc, updateDoc, deleteDoc,
+      onSnapshot, query, orderBy, serverTimestamp, getDoc
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-    const initialProducts = [
-      { id: 1, nome: "Arroz com Galinha", preco: 22.9, categoria: "Prato principal", descricao: "Arroz temperado com frango desfiado e cheiro-verde.", imagem: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1200&q=80" },
-      { id: 2, nome: "Vatapá", preco: 18.9, categoria: "Regional", descricao: "Cremoso, sabor marcante e preparo caseiro.", imagem: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80" },
-      { id: 3, nome: "Lasanha", preco: 24.9, categoria: "Massas", descricao: "Lasanha gratinada, recheada e bem servida.", imagem: "https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=1200&q=80" },
-      { id: 4, nome: "Torta Salgada", preco: 12.9, categoria: "Lanches", descricao: "Fatia generosa, macia e muito saborosa.", imagem: "https://images.unsplash.com/photo-1464306076886-da185f6a9d05?auto=format&fit=crop&w=1200&q=80" },
-      { id: 5, nome: "Refrigerante", preco: 6.5, categoria: "Bebidas", descricao: "Lata gelada para acompanhar seu pedido.", imagem: "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?auto=format&fit=crop&w=1200&q=80" }
-    ];
+    const CONFIG = {
+      adminUser: "leane",
+      adminPassword: "060923",
+      fallbackImage: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80",
+      firebase: {
+        apiKey: "AIzaSyDSB9RT94ugjmIp20g_qpPg2UIPHvWW0IA",
+        authDomain: "deliciasdelivery-2ebb5.firebaseapp.com",
+        projectId: "deliciasdelivery-2ebb5",
+        storageBucket: "deliciasdelivery-2ebb5.firebasestorage.app",
+        messagingSenderId: "411760493993",
+        appId: "1:411760493993:web:d9c217a1a8c3924fb0b0b8",
+      },
+      cloudinary: {
+        cloudName: 'deymrltp7',
+        uploadPreset: '864478572925262',
+      }
+    };
 
-    let products = JSON.parse(localStorage.getItem("dd_products_public_final") || "null") || initialProducts;
-    let cart = [];
-    let selectedCategory = "Todos";
-    let editingId = null;
-    let bannerImage = localStorage.getItem("dd_banner_public_final") || "";
-    let shippingFeeValue = Number(localStorage.getItem("dd_shipping_public_final") || DEFAULT_SHIPPING);
-    let whatsappNumberValue = localStorage.getItem("dd_whatsapp_public_final") || DEFAULT_WHATSAPP;
-    let adminLogged = localStorage.getItem("dd_admin_public_final") === "true";
+    const hasFirebaseConfig = Object.values(CONFIG.firebase).every(v => v && v !== "COLE_AQUI");
+    const hasCloudinaryConfig = Object.values(CONFIG.cloudinary).every(v => v && v !== "COLE_AQUI");
 
+    const state = {
+      products: [],
+      cart: [],
+      selectedCategory: "Todos",
+      editingId: null,
+      adminLogged: sessionStorage.getItem("dd_admin_cloud") === "true",
+      bannerImage: "",
+      shippingFee: 5,
+      whatsappNumber: "559198312053",
+      pendingProductImageUrl: "",
+      pendingBannerUrl: ""
+    };
+
+    const statusBox = document.getElementById("statusBox");
     const searchInput = document.getElementById("searchInput");
     const productsEl = document.getElementById("products");
     const categoriesEl = document.getElementById("categories");
@@ -351,34 +222,29 @@
     const adminPanelBtn = document.getElementById("adminPanelBtn");
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
 
-    function currency(value){ return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(value||0)); }
-    function isPublicImageUrl(value){ return /^https?:\/\//i.test((value || "").trim()); }
-    function safeImage(value){ return isPublicImageUrl(value) ? value.trim() : FALLBACK_IMAGE; }
+    let db = null;
 
-    function saveProductsStorage(){ localStorage.setItem("dd_products_public_final", JSON.stringify(products)); }
-    function saveStoreStorage(){
-      localStorage.setItem("dd_banner_public_final", bannerImage || "");
-      localStorage.setItem("dd_shipping_public_final", String(shippingFeeValue || 0));
-      localStorage.setItem("dd_whatsapp_public_final", whatsappNumberValue || "");
-    }
+    function setStatus(msg){ statusBox.textContent = msg; }
+    function currency(value){ return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(value||0)); }
+    function safeImage(value){ return value && /^https?:\/\//i.test(value) ? value : CONFIG.fallbackImage; }
 
     function renderBanner(){
-      if (isPublicImageUrl(bannerImage)){
-        bannerAreaEl.innerHTML = `<img src="${bannerImage}" alt="Banner principal" onerror="this.src='${FALLBACK_IMAGE}'">`;
+      if (state.bannerImage){
+        bannerAreaEl.innerHTML = `<img src="${state.bannerImage}" alt="Banner principal" onerror="this.src='${CONFIG.fallbackImage}'">`;
       } else {
-        bannerAreaEl.innerHTML = `<div class="banner-fallback"><p class="kicker" style="margin:0;color:#ddd6fe;text-transform:uppercase;letter-spacing:.3em;font-size:12px">BANNER PRINCIPAL</p><h1>Delícias Delivery</h1><p>Envios rápidos, pratos saborosos e atendimento no WhatsApp.</p></div>`;
+        bannerAreaEl.innerHTML = `<div class="banner-fallback"><p>BANNER PRINCIPAL</p><h1>Delícias Delivery</h1><p class="sub">Envios rápidos, pratos saborosos e atendimento no WhatsApp.</p></div>`;
       }
     }
 
     function renderCategories(){
-      const categories = ["Todos", ...new Set(products.map(p => p.categoria).filter(Boolean))];
-      categoriesEl.innerHTML = categories.map(cat => `<button class="chip ${selectedCategory === cat ? 'active' : ''}" onclick="setCategory('${cat.replace(/'/g, "\\'")}')">${cat}</button>`).join("");
+      const cats = ["Todos", ...new Set(state.products.map(p => p.categoria).filter(Boolean))];
+      categoriesEl.innerHTML = cats.map(cat => `<button class="chip ${state.selectedCategory === cat ? 'active' : ''}" onclick="window.setCategory('${cat.replace(/'/g, "\\'")}')">${cat}</button>`).join("");
     }
 
     function filteredProducts(){
       const term = searchInput.value.toLowerCase().trim();
-      return products.filter(item => {
-        const matchesCategory = selectedCategory === "Todos" || item.categoria === selectedCategory;
+      return state.products.filter(item => {
+        const matchesCategory = state.selectedCategory === "Todos" || item.categoria === state.selectedCategory;
         const matchesSearch = !term || item.nome.toLowerCase().includes(term) || item.categoria.toLowerCase().includes(term) || item.descricao.toLowerCase().includes(term);
         return matchesCategory && matchesSearch;
       });
@@ -389,106 +255,133 @@
       productsEl.innerHTML = list.map(product => `
         <div class="product-card glass">
           <div class="product-image">
-            <img src="${safeImage(product.imagem)}" alt="${product.nome}" onerror="this.src='${FALLBACK_IMAGE}'">
+            <img src="${safeImage(product.imagem)}" alt="${product.nome}" onerror="this.src='${CONFIG.fallbackImage}'">
             <span class="cat-badge">${product.categoria}</span>
           </div>
           <div class="product-body">
             <div class="product-top">
-              <div>
-                <h3 style="margin:0 0 6px">${product.nome}</h3>
-                <div class="muted" style="font-size:14px">${product.descricao}</div>
-              </div>
+              <div><h3 style="margin:0 0 6px">${product.nome}</h3><div class="muted" style="font-size:14px">${product.descricao || ""}</div></div>
               <div class="price">${currency(product.preco)}</div>
             </div>
             <div class="actions">
-              <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})">Adicionar</button>
-              ${adminLogged ? `<button class="btn btn-secondary btn-small" onclick="editProduct(${product.id})">Editar</button>` : ``}
+              <button class="btn btn-primary btn-small" onclick="window.addToCart('${product.id}')">Adicionar</button>
+              ${state.adminLogged ? `<button class="btn btn-secondary btn-small" onclick="window.editProduct('${product.id}')">Editar</button>` : ``}
             </div>
           </div>
         </div>`).join("");
     }
 
     function renderCart(){
-      const subtotal = cart.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
-      const deliveryFee = cart.length ? Number(shippingFeeValue || 0) : 0;
+      const subtotal = state.cart.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
+      const deliveryFee = state.cart.length ? Number(state.shippingFee || 0) : 0;
       const total = subtotal + deliveryFee;
-      const totalItems = cart.reduce((acc, item) => acc + item.quantidade, 0);
+      const totalItems = state.cart.reduce((acc, item) => acc + item.quantidade, 0);
       cartSummaryEl.textContent = `${totalItems} itens • ${currency(total)}`;
       cartSubEl.textContent = `Subtotal: ${currency(subtotal)} • Taxa de entrega: ${currency(deliveryFee)}`;
-      cartPillsEl.innerHTML = !cart.length
+      cartPillsEl.innerHTML = !state.cart.length
         ? `<span class="muted">Adicione produtos para começar um pedido.</span>`
-        : cart.map(item => `<div class="cart-pill">${item.nome} x${item.quantidade}<button class="btn btn-secondary btn-small" style="padding:4px 8px;margin-left:8px" onclick="removeFromCart(${item.id})">-</button></div>`).join("");
-      const text = encodeURIComponent(`Olá! Quero fazer um pedido na Delícias Delivery:\n${cart.map(item => `- ${item.nome} x${item.quantidade} = ${currency(item.preco * item.quantidade)}`).join("\n")}\n\nSubtotal: ${currency(subtotal)}\nTaxa de entrega: ${currency(deliveryFee)}\nTotal: ${currency(total)}`);
-      whatsappLinkEl.href = `https://wa.me/${whatsappNumberValue}?text=${text}`;
+        : state.cart.map(item => `<div class="cart-pill">${item.nome} x${item.quantidade}<button class="btn btn-secondary btn-small" style="padding:4px 8px;margin-left:8px" onclick="window.removeFromCart('${item.id}')">-</button></div>`).join("");
+      const text = encodeURIComponent(`Olá! Quero fazer um pedido na Delícias Delivery:\n${state.cart.map(item => `- ${item.nome} x${item.quantidade} = ${currency(item.preco * item.quantidade)}`).join("\n")}\n\nSubtotal: ${currency(subtotal)}\nTaxa de entrega: ${currency(deliveryFee)}\nTotal: ${currency(total)}`);
+      whatsappLinkEl.href = `https://wa.me/${state.whatsappNumber}?text=${text}`;
     }
 
     function renderAdminList(){
       const adminList = document.getElementById("adminList");
-      adminList.innerHTML = products.map(product => `
+      adminList.innerHTML = state.products.map(product => `
         <div class="admin-item glass">
           <div class="admin-left">
-            <img src="${safeImage(product.imagem)}" alt="${product.nome}" onerror="this.src='${FALLBACK_IMAGE}'">
-            <div>
-              <div style="font-weight:700">${product.nome}</div>
-              <div class="muted" style="font-size:14px">${product.categoria} • ${currency(product.preco)}</div>
-            </div>
+            <img src="${safeImage(product.imagem)}" alt="${product.nome}" onerror="this.src='${CONFIG.fallbackImage}'">
+            <div><div style="font-weight:700">${product.nome}</div><div class="muted" style="font-size:14px">${product.categoria} • ${currency(product.preco)}</div></div>
           </div>
           <div class="row">
-            <button class="btn btn-warn btn-small" onclick="editProduct(${product.id})">Editar</button>
-            <button class="btn btn-danger btn-small" onclick="deleteProduct(${product.id})">Remover</button>
+            <button class="btn btn-warn btn-small" onclick="window.editProduct('${product.id}')">Editar</button>
+            <button class="btn btn-danger btn-small" onclick="window.deleteProduct('${product.id}')">Remover</button>
           </div>
         </div>`).join("");
     }
 
     function renderAdminState(){
-      adminAccessBtn.style.display = adminLogged ? "none" : "inline-flex";
-      adminPanelBtn.style.display = adminLogged ? "inline-flex" : "none";
-      adminLogoutBtn.style.display = adminLogged ? "inline-flex" : "none";
+      adminAccessBtn.style.display = state.adminLogged ? "none" : "inline-flex";
+      adminPanelBtn.style.display = state.adminLogged ? "inline-flex" : "none";
+      adminLogoutBtn.style.display = state.adminLogged ? "inline-flex" : "none";
     }
 
     function renderAll(){ renderBanner(); renderCategories(); renderProducts(); renderCart(); renderAdminList(); renderAdminState(); }
-    function setCategory(category){ selectedCategory = category; renderCategories(); renderProducts(); }
 
-    function addToCart(id){
-      const product = products.find(p => p.id === id);
-      if (!product) return;
-      const found = cart.find(item => item.id === id);
-      if (found){ found.quantidade += 1; } else { cart.push({...product, quantidade:1}); }
-      renderCart();
+    async function uploadToCloudinary(file){
+      if (!hasCloudinaryConfig) throw new Error("Cloudinary não configurado.");
+      const form = new FormData();
+      form.append("file", file);
+      form.append("upload_preset", CONFIG.cloudinary.uploadPreset);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CONFIG.cloudinary.cloudName}/image/upload`, {
+        method: "POST",
+        body: form
+      });
+      const data = await res.json();
+      if (!res.ok || !data.secure_url) {
+        throw new Error(data.error?.message || "Falha no upload para o Cloudinary.");
+      }
+      return data.secure_url;
     }
 
-    function removeFromCart(id){
-      cart = cart.map(item => item.id === id ? {...item, quantidade:item.quantidade - 1} : item).filter(item => item.quantidade > 0);
-      renderCart();
+    async function initFirebase(){
+      if (!hasFirebaseConfig){
+        setStatus("Preencha a configuração do Firebase no código.");
+        renderAll();
+        return;
+      }
+      const app = initializeApp(CONFIG.firebase);
+      db = getFirestore(app);
+
+      const settingsRef = doc(db, "store", "settings");
+      const productsQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
+
+      onSnapshot(settingsRef, (snap) => {
+        const data = snap.exists() ? snap.data() : {};
+        state.bannerImage = data.bannerImage || "";
+        state.shippingFee = Number(data.shippingFee || 5);
+        state.whatsappNumber = data.whatsappNumber || "559198312053";
+        document.getElementById("shippingFee").value = state.shippingFee;
+        document.getElementById("whatsappNumber").value = state.whatsappNumber;
+        document.getElementById("bannerUrl").value = state.bannerImage || "";
+        if (state.bannerImage){
+          document.getElementById("bannerPreview").style.display = "block";
+          document.getElementById("bannerPreviewImg").src = state.bannerImage;
+        }
+        renderAll();
+      });
+
+      onSnapshot(productsQuery, (snap) => {
+        state.products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderAll();
+      });
+
+      const settingsSnap = await getDoc(settingsRef);
+      if (!settingsSnap.exists()){
+        await setDoc(settingsRef, {
+          bannerImage: "",
+          shippingFee: 5,
+          whatsappNumber: "559198312053"
+        });
+      }
+
+      setStatus(hasCloudinaryConfig ? "Firebase e Cloudinary conectados." : "Firebase conectado. Falta configurar o Cloudinary.");
+      renderAll();
     }
 
     function openLogin(){ document.getElementById("loginModal").classList.add("show"); }
     function closeLogin(){ document.getElementById("loginModal").classList.remove("show"); }
-
-    function openAdmin(){
-      document.getElementById("shippingFee").value = shippingFeeValue;
-      document.getElementById("whatsappNumber").value = whatsappNumberValue;
-      document.getElementById("bannerUrl").value = bannerImage || "";
-      if (isPublicImageUrl(bannerImage)){
-        document.getElementById("bannerPreview").style.display = "block";
-        document.getElementById("bannerPreviewImg").src = bannerImage;
-      } else {
-        document.getElementById("bannerPreview").style.display = "none";
-      }
-      document.getElementById("adminModal").classList.add("show");
-      renderAdminList();
-    }
-
+    function openAdmin(){ document.getElementById("adminModal").classList.add("show"); renderAdminList(); }
     function closeAdmin(){ document.getElementById("adminModal").classList.remove("show"); }
 
-    function handleLogin(event){
+    async function handleLogin(event){
       event.preventDefault();
       const user = document.getElementById("loginUser").value.trim().toLowerCase();
       const pass = document.getElementById("loginPass").value;
       const err = document.getElementById("loginError");
-      if (user === ADMIN_USER && pass === ADMIN_PASSWORD){
-        adminLogged = true;
-        localStorage.setItem("dd_admin_public_final","true");
+      if (user === CONFIG.adminUser && pass === CONFIG.adminPassword){
+        state.adminLogged = true;
+        sessionStorage.setItem("dd_admin_cloud","true");
         err.style.display = "none";
         closeLogin();
         renderAll();
@@ -499,95 +392,165 @@
     }
 
     function logoutAdmin(){
-      adminLogged = false;
-      localStorage.removeItem("dd_admin_public_final");
+      state.adminLogged = false;
+      sessionStorage.removeItem("dd_admin_cloud");
       closeAdmin();
       renderAll();
     }
 
     function resetForm(){
-      editingId = null;
+      state.editingId = null;
+      state.pendingProductImageUrl = "";
       document.getElementById("adminTitle").textContent = "Cadastrar novo produto";
       document.getElementById("prodNome").value = "";
       document.getElementById("prodPreco").value = "";
       document.getElementById("prodCategoria").value = "";
       document.getElementById("prodDescricao").value = "";
-      document.getElementById("prodImagemUrl").value = "";
+      document.getElementById("prodImagemFile").value = "";
       document.getElementById("prodPreview").style.display = "none";
     }
 
-    function saveProduct(event){
+    async function saveProduct(event){
       event.preventDefault();
-      const imageUrl = document.getElementById("prodImagemUrl").value.trim();
-      const payload = {
-        id: editingId || Date.now(),
-        nome: document.getElementById("prodNome").value.trim(),
-        preco: Number(document.getElementById("prodPreco").value),
-        categoria: document.getElementById("prodCategoria").value.trim(),
-        descricao: document.getElementById("prodDescricao").value.trim(),
-        imagem: safeImage(imageUrl)
-      };
-      if (!payload.nome || !payload.categoria || !payload.preco) return;
-      if (editingId){ products = products.map(item => item.id === editingId ? payload : item); }
-      else { products.unshift(payload); }
-      saveProductsStorage();
-      resetForm();
-      renderAll();
+      if (!db) return alert("Firebase não configurado.");
+      const file = document.getElementById("prodImagemFile").files[0];
+      let imageUrl = state.pendingProductImageUrl || "";
+      try{
+        if (file) {
+          setStatus("Enviando imagem do produto para o Cloudinary...");
+          imageUrl = await uploadToCloudinary(file);
+        }
+        const payload = {
+          nome: document.getElementById("prodNome").value.trim(),
+          preco: Number(document.getElementById("prodPreco").value),
+          categoria: document.getElementById("prodCategoria").value.trim(),
+          descricao: document.getElementById("prodDescricao").value.trim(),
+          imagem: imageUrl || CONFIG.fallbackImage,
+          createdAt: serverTimestamp()
+        };
+        if (!payload.nome || !payload.categoria || !payload.preco) return;
+        if (state.editingId){
+          await updateDoc(doc(db, "products", state.editingId), payload);
+        } else {
+          const id = crypto.randomUUID();
+          await setDoc(doc(db, "products", id), payload);
+        }
+        setStatus("Produto salvo com sucesso.");
+        resetForm();
+      } catch (e){
+        setStatus("Erro ao salvar produto: " + e.message);
+      }
     }
 
-    function editProduct(id){
-      const product = products.find(item => item.id === id);
+    async function editProduct(id){
+      const product = state.products.find(item => item.id === id);
       if (!product) return;
-      editingId = id;
+      state.editingId = id;
+      state.pendingProductImageUrl = product.imagem || "";
       document.getElementById("adminTitle").textContent = "Editar produto";
-      document.getElementById("prodNome").value = product.nome;
-      document.getElementById("prodPreco").value = product.preco;
-      document.getElementById("prodCategoria").value = product.categoria;
-      document.getElementById("prodDescricao").value = product.descricao;
-      document.getElementById("prodImagemUrl").value = product.imagem;
+      document.getElementById("prodNome").value = product.nome || "";
+      document.getElementById("prodPreco").value = product.preco || "";
+      document.getElementById("prodCategoria").value = product.categoria || "";
+      document.getElementById("prodDescricao").value = product.descricao || "";
       document.getElementById("prodPreview").style.display = "block";
       document.getElementById("prodPreviewImg").src = safeImage(product.imagem);
       openAdmin();
     }
 
-    function deleteProduct(id){
-      products = products.filter(item => item.id !== id);
-      cart = cart.filter(item => item.id !== id);
-      saveProductsStorage();
-      renderAll();
-    }
-
-    function saveStoreSettings(){
-      shippingFeeValue = Number(document.getElementById("shippingFee").value || 0);
-      whatsappNumberValue = document.getElementById("whatsappNumber").value.replace(/\D/g, "");
-      bannerImage = document.getElementById("bannerUrl").value.trim();
-      saveStoreStorage();
-      renderAll();
-      alert("Configurações salvas com sucesso.");
-    }
-
-    document.getElementById("prodImagemUrl").addEventListener("input", function(e){
-      const value = e.target.value.trim();
-      if (isPublicImageUrl(value)){
-        document.getElementById("prodPreview").style.display = "block";
-        document.getElementById("prodPreviewImg").src = value;
-      } else {
-        document.getElementById("prodPreview").style.display = "none";
+    async function deleteProduct(id){
+      if (!db) return;
+      try{
+        await deleteDoc(doc(db, "products", id));
+        state.cart = state.cart.filter(item => item.id !== id);
+        setStatus("Produto removido.");
+      } catch (e){
+        setStatus("Erro ao remover produto: " + e.message);
       }
+    }
+
+    async function saveStoreSettings(){
+      if (!db) return alert("Firebase não configurado.");
+      try{
+        const bannerFile = document.getElementById("bannerFile").files[0];
+        let bannerUrl = state.bannerImage || "";
+        if (bannerFile){
+          setStatus("Enviando banner para o Cloudinary...");
+          bannerUrl = await uploadToCloudinary(bannerFile);
+        }
+        bannerUrl = bannerUrl || "";
+        const shippingFee = Number(document.getElementById("shippingFee").value || 0);
+        const whatsappNumber = document.getElementById("whatsappNumber").value.replace(/\D/g, "");
+        await setDoc(doc(db, "store", "settings"), {
+          bannerImage: bannerUrl,
+          shippingFee,
+          whatsappNumber
+        }, { merge: true });
+        setStatus("Configurações salvas com sucesso.");
+      } catch (e){
+        setStatus("Erro ao salvar configurações: " + e.message);
+      }
+    }
+
+    function addToCart(id){
+      const product = state.products.find(p => p.id === id);
+      if (!product) return;
+      const found = state.cart.find(item => item.id === id);
+      if (found){ found.quantidade += 1; } else { state.cart.push({...product, quantidade:1}); }
+      renderCart();
+    }
+
+    function removeFromCart(id){
+      state.cart = state.cart.map(item => item.id === id ? {...item, quantidade:item.quantidade - 1} : item).filter(item => item.quantidade > 0);
+      renderCart();
+    }
+
+    function setCategory(category){
+      state.selectedCategory = category;
+      renderCategories();
+      renderProducts();
+    }
+
+    document.getElementById("prodImagemFile").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        document.getElementById("prodPreview").style.display = "block";
+        document.getElementById("prodPreviewImg").src = reader.result;
+      };
+      reader.readAsDataURL(file);
     });
 
-    document.getElementById("bannerUrl").addEventListener("input", function(e){
-      const value = e.target.value.trim();
-      if (isPublicImageUrl(value)){
+    document.getElementById("bannerFile").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
         document.getElementById("bannerPreview").style.display = "block";
-        document.getElementById("bannerPreviewImg").src = value;
-      } else {
-        document.getElementById("bannerPreview").style.display = "none";
-      }
+        document.getElementById("bannerPreviewImg").src = reader.result;
+      };
+      reader.readAsDataURL(file);
     });
 
     searchInput.addEventListener("input", renderProducts);
+
+    window.openLogin = openLogin;
+    window.closeLogin = closeLogin;
+    window.openAdmin = openAdmin;
+    window.closeAdmin = closeAdmin;
+    window.handleLogin = handleLogin;
+    window.logoutAdmin = logoutAdmin;
+    window.resetForm = resetForm;
+    window.saveProduct = saveProduct;
+    window.editProduct = editProduct;
+    window.deleteProduct = deleteProduct;
+    window.saveStoreSettings = saveStoreSettings;
+    window.addToCart = addToCart;
+    window.removeFromCart = removeFromCart;
+    window.setCategory = setCategory;
+
     renderAll();
+    initFirebase();
   </script>
 </body>
 </html>
