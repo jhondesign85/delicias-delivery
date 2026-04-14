@@ -7,14 +7,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import {
   ShoppingCart,
-  Plus,
   Pencil,
   Trash2,
   Store,
-  Star,
-  Phone,
-  MapPin,
-  Clock3,
   Lock,
   LogOut,
   ShieldCheck,
@@ -22,6 +17,7 @@ import {
   EyeOff,
   Truck,
   Image as ImageIcon,
+  Plus,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -29,6 +25,7 @@ const ADMIN_USER = "leane";
 const ADMIN_PASSWORD = "060923";
 const DEFAULT_WHATSAPP = "559198312053";
 const DEFAULT_SHIPPING = 5;
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80";
 
 const initialProducts = [
   {
@@ -81,22 +78,31 @@ const emptyForm = {
   imagem: "",
 };
 
-function currency(value) {
+function currency(value: number | string) {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   }).format(Number(value || 0));
 }
 
-export default function DeliciasDeliveryCorrigido() {
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
+function isPublicImageUrl(value: string) {
+  return /^https?:\/\//i.test((value || "").trim());
+}
+
+function imageErrorFallback(e: React.SyntheticEvent<HTMLImageElement>) {
+  e.currentTarget.src = FALLBACK_IMAGE;
+}
+
+export default function DeliciasDeliveryUrlPublica() {
+  const [products, setProducts] = useState(initialProducts);
+  const [cart, setCart] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
-  const [adminOpen, setAdminOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [form, setForm] = useState(emptyForm);
   const [adminLogged, setAdminLogged] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [form, setForm] = useState(emptyForm);
   const [loginForm, setLoginForm] = useState({ user: "", password: "" });
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -105,33 +111,33 @@ export default function DeliciasDeliveryCorrigido() {
   const [whatsappNumber, setWhatsappNumber] = useState(DEFAULT_WHATSAPP);
 
   useEffect(() => {
-    const savedProducts = localStorage.getItem("dd_products");
-    const savedBanner = localStorage.getItem("dd_banner");
-    const savedShipping = localStorage.getItem("dd_shipping");
-    const savedWhatsapp = localStorage.getItem("dd_whatsapp");
-    const savedAdmin = localStorage.getItem("dd_admin");
+    const savedProducts = localStorage.getItem("dd_products_public");
+    const savedBanner = localStorage.getItem("dd_banner_public");
+    const savedShipping = localStorage.getItem("dd_shipping_public");
+    const savedWhatsapp = localStorage.getItem("dd_whatsapp_public");
+    const savedAdmin = localStorage.getItem("dd_admin_public");
 
-    setProducts(savedProducts ? JSON.parse(savedProducts) : initialProducts);
-    setBannerImage(savedBanner || "");
-    setShippingFee(savedShipping ? Number(savedShipping) : DEFAULT_SHIPPING);
-    setWhatsappNumber(savedWhatsapp || DEFAULT_WHATSAPP);
+    if (savedProducts) setProducts(JSON.parse(savedProducts));
+    if (savedBanner) setBannerImage(savedBanner);
+    if (savedShipping) setShippingFee(Number(savedShipping));
+    if (savedWhatsapp) setWhatsappNumber(savedWhatsapp);
     setAdminLogged(savedAdmin === "true");
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("dd_products", JSON.stringify(products));
+    localStorage.setItem("dd_products_public", JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem("dd_banner", bannerImage || "");
+    localStorage.setItem("dd_banner_public", bannerImage || "");
   }, [bannerImage]);
 
   useEffect(() => {
-    localStorage.setItem("dd_shipping", String(shippingFee || 0));
+    localStorage.setItem("dd_shipping_public", String(shippingFee || 0));
   }, [shippingFee]);
 
   useEffect(() => {
-    localStorage.setItem("dd_whatsapp", whatsappNumber || "");
+    localStorage.setItem("dd_whatsapp_public", whatsappNumber || "");
   }, [whatsappNumber]);
 
   const categories = useMemo(() => {
@@ -152,14 +158,11 @@ export default function DeliciasDeliveryCorrigido() {
     });
   }, [products, search, selectedCategory]);
 
-  const subtotal = useMemo(() => {
-    return cart.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
-  }, [cart]);
-
+  const subtotal = useMemo(() => cart.reduce((acc, item) => acc + item.preco * item.quantidade, 0), [cart]);
   const deliveryFee = cart.length ? Number(shippingFee || 0) : 0;
   const total = subtotal + deliveryFee;
 
-  function addToCart(product) {
+  function addToCart(product: any) {
     setCart((prev) => {
       const found = prev.find((item) => item.id === product.id);
       if (found) {
@@ -171,17 +174,15 @@ export default function DeliciasDeliveryCorrigido() {
     });
   }
 
-  function removeFromCart(id) {
+  function removeFromCart(id: number) {
     setCart((prev) =>
       prev
-        .map((item) =>
-          item.id === id ? { ...item, quantidade: item.quantidade - 1 } : item
-        )
+        .map((item) => (item.id === id ? { ...item, quantidade: item.quantidade - 1 } : item))
         .filter((item) => item.quantidade > 0)
     );
   }
 
-  function handleChange(field, value) {
+  function handleChange(field: string, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
@@ -190,7 +191,7 @@ export default function DeliciasDeliveryCorrigido() {
     setEditingId(null);
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const payload = {
       id: editingId || Date.now(),
@@ -198,9 +199,7 @@ export default function DeliciasDeliveryCorrigido() {
       preco: Number(form.preco),
       categoria: form.categoria.trim(),
       descricao: form.descricao.trim(),
-      imagem:
-        form.imagem ||
-        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80",
+      imagem: isPublicImageUrl(form.imagem) ? form.imagem.trim() : FALLBACK_IMAGE,
     };
 
     if (!payload.nome || !payload.categoria || !payload.preco) return;
@@ -214,7 +213,7 @@ export default function DeliciasDeliveryCorrigido() {
     resetForm();
   }
 
-  function handleEdit(product) {
+  function handleEdit(product: any) {
     setEditingId(product.id);
     setForm({
       nome: product.nome,
@@ -226,13 +225,13 @@ export default function DeliciasDeliveryCorrigido() {
     setAdminOpen(true);
   }
 
-  function handleDelete(id) {
+  function handleDelete(id: number) {
     setProducts((prev) => prev.filter((item) => item.id !== id));
     setCart((prev) => prev.filter((item) => item.id !== id));
     if (editingId === id) resetForm();
   }
 
-  function handleLogin(e) {
+  function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     if (
       loginForm.user.trim().toLowerCase() === ADMIN_USER &&
@@ -240,8 +239,9 @@ export default function DeliciasDeliveryCorrigido() {
     ) {
       setAdminLogged(true);
       setLoginError("");
-      localStorage.setItem("dd_admin", "true");
+      setLoginOpen(false);
       setLoginForm({ user: "", password: "" });
+      localStorage.setItem("dd_admin_public", "true");
       return;
     }
     setLoginError("Usuário ou senha incorretos.");
@@ -254,15 +254,7 @@ export default function DeliciasDeliveryCorrigido() {
     setLoginError("");
     setShowPassword(false);
     setLoginForm({ user: "", password: "" });
-    localStorage.removeItem("dd_admin");
-  }
-
-  function handleImageUpload(event, setter) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setter(String(reader.result || ""));
-    reader.readAsDataURL(file);
+    localStorage.removeItem("dd_admin_public");
   }
 
   const whatsappText = encodeURIComponent(
@@ -277,8 +269,8 @@ export default function DeliciasDeliveryCorrigido() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(216,180,254,0.25),transparent_30%),radial-gradient(circle_at_top_left,rgba(192,132,252,0.18),transparent_35%)]" />
         <div className="relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
           <div className="mb-6 overflow-hidden rounded-[32px] border border-white/10 bg-white/10 shadow-2xl backdrop-blur-md">
-            {bannerImage ? (
-              <img src={bannerImage} alt="Banner principal" className="h-52 w-full object-cover md:h-72" />
+            {bannerImage && isPublicImageUrl(bannerImage) ? (
+              <img src={bannerImage} onError={imageErrorFallback} alt="Banner principal" className="h-52 w-full object-cover md:h-72" />
             ) : (
               <div className="flex h-52 w-full items-center justify-center bg-gradient-to-r from-violet-600/30 to-fuchsia-600/30 md:h-72">
                 <div className="text-center">
@@ -311,7 +303,7 @@ export default function DeliciasDeliveryCorrigido() {
             ) : (
               <Button
                 variant="outline"
-                onClick={() => setAdminOpen(true)}
+                onClick={() => setLoginOpen(true)}
                 className="rounded-2xl border-violet-300/40 bg-white/5 px-6 text-white hover:bg-white/10"
               >
                 <Lock className="mr-2 h-4 w-4" /> Acesso do administrador
@@ -319,77 +311,164 @@ export default function DeliciasDeliveryCorrigido() {
             )}
           </div>
 
-          <Dialog open={adminOpen} onOpenChange={setAdminOpen}>
+          <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
             <DialogContent className="border-white/10 bg-slate-950 text-white sm:max-w-md">
-              {adminLogged ? (
-                <>
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">Área administrativa</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-3 rounded-3xl border border-white/10 bg-white/5 p-4">
-                    <p className="text-sm text-violet-200">Os botões administrativos foram recolocados. No próximo passo eu posso devolver o painel completo.</p>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">Entrar como administrador</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleLogin} className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-4">
+                <div className="space-y-2">
+                  <label className="text-sm text-violet-200">Usuário</label>
+                  <Input
+                    type="text"
+                    value={loginForm.user}
+                    onChange={(e) => setLoginForm((prev) => ({ ...prev, user: e.target.value }))}
+                    className="border-white/10 bg-white/10"
+                    placeholder="leane"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm text-violet-200">Senha</label>
+                  <div className="flex gap-2">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      value={loginForm.password}
+                      onChange={(e) => setLoginForm((prev) => ({ ...prev, password: e.target.value }))}
+                      className="border-white/10 bg-white/10"
+                      placeholder="Digite sua senha"
+                    />
                     <Button
                       type="button"
-                      onClick={() => setAdminOpen(false)}
-                      className="rounded-2xl bg-violet-400 text-violet-950 hover:bg-violet-300"
+                      variant="outline"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="rounded-2xl border-white/15 bg-transparent text-white hover:bg-white/10"
                     >
-                      Fechar
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
-                </>
-              ) : (
-                <>
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">Entrar como administrador</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleLogin} className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-4">
-                    <div className="space-y-2">
-                      <label className="text-sm text-violet-200">Usuário</label>
-                      <Input
-                        type="text"
-                        value={loginForm.user}
-                        onChange={(e) => setLoginForm((prev) => ({ ...prev, user: e.target.value }))}
-                        className="border-white/10 bg-white/10"
-                        placeholder="leane"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm text-violet-200">Senha</label>
-                      <div className="flex gap-2">
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          value={loginForm.password}
-                          onChange={(e) => setLoginForm((prev) => ({ ...prev, password: e.target.value }))}
-                          className="border-white/10 bg-white/10"
-                          placeholder="Digite sua senha"
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => setShowPassword((prev) => !prev)}
-                          className="rounded-2xl border-white/15 bg-transparent text-white hover:bg-white/10"
-                        >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </Button>
-                      </div>
-                    </div>
-                    {loginError ? (
-                      <div className="rounded-2xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200">
-                        {loginError}
-                      </div>
-                    ) : null}
-                    <Button
-                      type="submit"
-                      className="w-full rounded-2xl bg-violet-400 text-violet-950 hover:bg-violet-300"
-                    >
-                      <ShieldCheck className="mr-2 h-4 w-4" /> Entrar
-                    </Button>
-                  </form>
-                </>
-              )}
+                </div>
+                {loginError ? (
+                  <div className="rounded-2xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200">
+                    {loginError}
+                  </div>
+                ) : null}
+                <div className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-sm text-amber-100">
+                  Acesso do admin: <strong>{ADMIN_USER}</strong> • Senha: <strong>{ADMIN_PASSWORD}</strong>
+                </div>
+                <Button type="submit" className="w-full rounded-2xl bg-violet-400 text-violet-950 hover:bg-violet-300">
+                  <ShieldCheck className="mr-2 h-4 w-4" /> Entrar
+                </Button>
+              </form>
             </DialogContent>
           </Dialog>
 
+          <Dialog open={adminOpen} onOpenChange={setAdminOpen}>
+            <DialogContent className="max-h-[90vh] overflow-y-auto border-white/10 bg-slate-950 text-white sm:max-w-5xl">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">
+                  {editingId ? "Editar produto" : "Painel administrativo"}
+                </DialogTitle>
+              </DialogHeader>
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div className="space-y-6">
+                  <form onSubmit={handleSubmit} className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <label className="text-sm text-violet-200">Nome do produto</label>
+                      <Input value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: Strogonoff" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-violet-200">Preço</label>
+                      <Input value={form.preco} onChange={(e) => handleChange("preco", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: 19.90" type="number" step="0.01" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-violet-200">Categoria</label>
+                      <Input value={form.categoria} onChange={(e) => handleChange("categoria", e.target.value)} className="border-white/10 bg-white/10" placeholder="Ex: Prato executivo" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-violet-200">URL pública da imagem</label>
+                      <Input value={form.imagem} onChange={(e) => handleChange("imagem", e.target.value)} className="border-white/10 bg-white/10" placeholder="https://..." />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm text-violet-200">Descrição</label>
+                      <Textarea value={form.descricao} onChange={(e) => handleChange("descricao", e.target.value)} className="min-h-[100px] border-white/10 bg-white/10" placeholder="Descreva o produto" />
+                    </div>
+                    {form.imagem ? (
+                      <div className="md:col-span-2 overflow-hidden rounded-2xl border border-white/10">
+                        <img src={form.imagem} onError={imageErrorFallback} alt="Prévia do produto" className="h-44 w-full object-cover" />
+                      </div>
+                    ) : null}
+                    <div className="md:col-span-2 rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-sm text-amber-100">
+                      Use uma URL pública da imagem. Assim os clientes conseguem ver a foto normalmente.
+                    </div>
+                    <div className="md:col-span-2 flex flex-wrap gap-3">
+                      <Button type="submit" className="rounded-2xl bg-violet-400 text-violet-950 hover:bg-violet-300">
+                        <Plus className="mr-2 h-4 w-4" /> {editingId ? "Salvar alterações" : "Adicionar produto"}
+                      </Button>
+                      <Button type="button" variant="outline" onClick={resetForm} className="rounded-2xl border-white/15 bg-transparent text-white hover:bg-white/10">
+                        Limpar
+                      </Button>
+                    </div>
+                  </form>
+
+                  <div className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-4">
+                    <div className="flex items-center gap-2 text-lg font-semibold">
+                      <Truck className="h-5 w-5" /> Configurações da loja
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-violet-200">Taxa de entrega</label>
+                      <Input value={shippingFee} onChange={(e) => setShippingFee(Number(e.target.value || 0))} type="number" step="0.01" className="border-white/10 bg-white/10" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-violet-200">WhatsApp</label>
+                      <Input value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value.replace(/\D/g, ""))} className="border-white/10 bg-white/10" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-violet-200">URL pública do banner</label>
+                      <Input value={bannerImage} onChange={(e) => setBannerImage(e.target.value)} className="border-white/10 bg-white/10" placeholder="https://..." />
+                    </div>
+                    {bannerImage ? (
+                      <div className="overflow-hidden rounded-2xl border border-white/10">
+                        <img src={bannerImage} onError={imageErrorFallback} alt="Prévia do banner" className="h-40 w-full object-cover" />
+                      </div>
+                    ) : null}
+                    <div className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-sm text-amber-100">
+                      O banner também precisa ser uma URL pública para aparecer para todos os clientes.
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+                    <div className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                      <ImageIcon className="h-5 w-5" /> Produtos cadastrados
+                    </div>
+                    <div className="grid max-h-[70vh] gap-3 overflow-y-auto pr-1">
+                      {products.map((product) => (
+                        <div key={product.id} className="flex flex-col gap-3 rounded-3xl border border-white/10 bg-white/5 p-3 md:flex-row md:items-center md:justify-between">
+                          <div className="flex items-center gap-3">
+                            <img src={product.imagem} onError={imageErrorFallback} alt={product.nome} className="h-16 w-16 rounded-2xl object-cover" />
+                            <div>
+                              <p className="font-semibold">{product.nome}</p>
+                              <p className="text-sm text-violet-200">{product.categoria} • {currency(product.preco)}</p>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button type="button" onClick={() => handleEdit(product)} className="rounded-2xl bg-amber-400 text-slate-950 hover:bg-amber-300">
+                              <Pencil className="mr-2 h-4 w-4" /> Editar
+                            </Button>
+                            <Button type="button" onClick={() => handleDelete(product.id)} className="rounded-2xl bg-red-500 hover:bg-red-400">
+                              <Trash2 className="mr-2 h-4 w-4" /> Remover
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
 
@@ -433,7 +512,7 @@ export default function DeliciasDeliveryCorrigido() {
             >
               <Card className="overflow-hidden rounded-[28px] border-white/10 bg-white/10 text-white shadow-2xl backdrop-blur-md">
                 <div className="relative h-56 overflow-hidden">
-                  <img src={product.imagem} alt={product.nome} className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" />
+                  <img src={product.imagem} onError={imageErrorFallback} alt={product.nome} className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent" />
                   <Badge className="absolute left-4 top-4 border-0 bg-violet-300/80 text-violet-950">{product.categoria}</Badge>
                 </div>
