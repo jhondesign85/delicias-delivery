@@ -2,922 +2,848 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Delícias Delivery</title>
   <meta name="theme-color" content="#5b21b6" />
   <style>
     :root {
-      --bg: #140a26;
-      --bg-soft: #1c1033;
-      --card: #241341;
-      --card-2: #311b59;
-      --primary: #a855f7;
-      --primary-2: #c084fc;
-      --primary-3: #ede9fe;
-      --text: #f5f3ff;
-      --muted: #d8b4fe;
-      --danger: #ef4444;
-      --success: #22c55e;
-      --shadow: 0 12px 30px rgba(0,0,0,0.28);
-      --radius: 20px;
+      --roxo-escuro: #4c1d95;
+      --roxo: #6d28d9;
+      --roxo-medio: #7c3aed;
+      --roxo-claro: #ede9fe;
+      --roxo-suave: #f5f3ff;
+      --rosa: #c084fc;
+      --texto: #24163b;
+      --branco: #ffffff;
+      --verde: #16a34a;
+      --vermelho: #dc2626;
+      --sombra: 0 10px 30px rgba(76, 29, 149, 0.18);
+      --borda: 1px solid rgba(109, 40, 217, 0.12);
     }
 
     * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #12081f 0%, #1d0f34 55%, #2c1450 100%);
-      color: var(--text);
-    }
-
-    body {
-      max-width: 520px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding-bottom: 100px;
-    }
-
+    html, body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background: linear-gradient(180deg, #faf7ff 0%, #f5f3ff 100%); color: var(--texto); }
+    body { max-width: 520px; margin: 0 auto; min-height: 100vh; position: relative; }
+    button, input, textarea, select { font: inherit; }
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 14px 16px;
-      background: rgba(20, 10, 38, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(192, 132, 252, 0.18);
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(10px);
+      border-bottom: var(--borda);
+      padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;
     }
-
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .brand-mini { font-weight: 800; color: var(--roxo-escuro); }
+    .icon-btn {
+      border: 0; background: var(--roxo-escuro); color: var(--branco); border-radius: 12px;
+      padding: 10px 12px; cursor: pointer; box-shadow: var(--sombra); font-weight: 700;
     }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 1.15rem;
-      line-height: 1.1;
-    }
-
-    .brand span {
-      color: var(--muted);
-      font-size: 0.82rem;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .btn:active { transform: scale(0.98); }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: #fff;
-      box-shadow: var(--shadow);
-    }
-
-    .btn-ghost {
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-      border: 1px solid rgba(192, 132, 252, 0.15);
-    }
-
-    .btn-danger {
-      background: var(--danger);
-      color: #fff;
-    }
-
-    .btn-success {
-      background: var(--success);
-      color: #07110b;
-    }
-
     .hero {
-      padding: 16px;
+      padding: 16px; margin: 0 12px; margin-top: 12px;
+      border-radius: 26px; overflow: hidden; box-shadow: var(--sombra); position: relative;
+      background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo), var(--rosa)); color: white;
     }
-
-    .banner {
-      background: linear-gradient(135deg, rgba(168,85,247,0.95), rgba(91,33,182,0.98));
-      border-radius: 28px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 84px 1fr;
-      gap: 16px;
-      align-items: center;
-      min-height: 164px;
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.22)); pointer-events: none;
     }
-
-    .banner::after {
-      content: "";
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-      right: -40px;
-      top: -70px;
+    .hero-bg {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.2;
     }
-
-    .banner-logo {
-      width: 84px;
-      height: 84px;
-      border-radius: 22px;
-      object-fit: cover;
-      background: rgba(255,255,255,0.16);
-      border: 1px solid rgba(255,255,255,0.22);
-      position: relative;
-      z-index: 1;
-      display: block;
+    .hero-content { position: relative; z-index: 1; }
+    .logo-wrap {
+      width: 88px; height: 88px; border-radius: 22px; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
-
-    .banner-content {
-      position: relative;
-      z-index: 1;
+    .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .hero h1 { margin: 14px 0 6px; font-size: 30px; line-height: 1.05; }
+    .hero p { margin: 0; opacity: 0.96; }
+    .hero .tag {
+      display: inline-block; margin-top: 12px; background: rgba(255,255,255,0.18); padding: 8px 12px; border-radius: 999px;
+      font-size: 13px; font-weight: 700;
     }
-
-    .banner small {
-      display: inline-block;
-      background: rgba(255,255,255,0.16);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
-
-    .banner h2 {
-      margin: 0 0 10px;
-      font-size: 1.55rem;
-    }
-
-    .banner p {
-      margin: 0;
-      color: #f3e8ff;
-      line-height: 1.5;
-    }
-
-    .status-row, .section, .admin-panel {
-      padding: 0 16px;
-    }
-
-    .status-box {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(192,132,252,0.14);
-      padding: 12px 14px;
-      border-radius: 16px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-
+    .section-title { padding: 18px 16px 10px; font-weight: 800; font-size: 20px; color: var(--roxo-escuro); }
+    .produtos { padding: 0 12px 120px; display: grid; gap: 14px; }
     .card {
-      background: linear-gradient(180deg, rgba(49,27,89,0.96), rgba(27,16,51,0.98));
-      border-radius: 22px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(192,132,252,0.12);
-      display: grid;
-      grid-template-columns: 104px 1fr;
-      gap: 14px;
-      align-items: start;
+      background: var(--branco); border-radius: 22px; overflow: hidden; box-shadow: var(--sombra); border: var(--borda);
     }
-
-    .product-image {
-      width: 100%;
-      height: 104px;
-      object-fit: cover;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(192,132,252,0.14);
+    .img-produto { width: 100%; height: 190px; object-fit: cover; display: block; background: #eee; }
+    .card-body { padding: 14px; }
+    .produto-topo { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; }
+    .produto-nome { font-size: 19px; font-weight: 800; margin: 0 0 6px; }
+    .produto-preco { color: var(--roxo); font-weight: 800; font-size: 18px; }
+    .badge-off { background: #fee2e2; color: #991b1b; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .descricao { margin: 0; color: #5b5570; font-size: 14px; }
+    .actions { display: flex; gap: 10px; margin-top: 14px; }
+    .btn {
+      flex: 1; border: 0; border-radius: 14px; padding: 12px 14px; font-weight: 800; cursor: pointer;
     }
-
-    .product-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: flex-start;
+    .btn-primary { background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio)); color: white; }
+    .btn-secondary { background: var(--roxo-claro); color: var(--roxo-escuro); }
+    .btn-green { background: var(--verde); color: white; }
+    .btn-red { background: var(--vermelho); color: white; }
+    .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+    .floating-cart {
+      position: fixed; right: 18px; bottom: 18px; z-index: 30; background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio));
+      color: white; border: 0; border-radius: 18px; padding: 14px 18px; box-shadow: var(--sombra); cursor: pointer; font-weight: 800;
     }
-
-    .product-title {
-      margin: 0;
-      font-size: 1.08rem;
+    .panel, .sheet, .overlay {
+      position: fixed; inset: 0; z-index: 60;
     }
-
-    .price {
-      margin-top: 8px;
-      font-weight: bold;
-      color: #f5d0fe;
-      font-size: 1rem;
+    .overlay { background: rgba(15, 10, 30, 0.55); display: none; }
+    .overlay.show { display: block; }
+    .sheet {
+      display: none; align-items: flex-end; justify-content: center; padding: 12px;
     }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
+    .sheet.show { display: flex; }
+    .sheet-card {
+      width: 100%; max-width: 520px; max-height: 92vh; overflow: auto; background: white; border-radius: 24px 24px 16px 16px;
+      box-shadow: var(--sombra); padding: 18px;
     }
-
-    .section h3, .admin-panel h3 {
-      margin: 12px 0 14px;
-      font-size: 1.05rem;
-      color: var(--primary-3);
+    .sheet-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .sheet-title { font-size: 22px; font-weight: 800; color: var(--roxo-escuro); margin: 0; }
+    .close-btn { border: 0; background: var(--roxo-claro); color: var(--roxo-escuro); padding: 10px 12px; border-radius: 12px; font-weight: 800; cursor: pointer; }
+    .field { margin-bottom: 12px; }
+    .field label { display: block; font-size: 13px; margin-bottom: 6px; color: #4b3f65; font-weight: 700; }
+    .field input, .field textarea, .field select {
+      width: 100%; border: 1px solid #ddd6fe; border-radius: 14px; padding: 12px; background: #fcfbff;
     }
-
-    .panel-box {
-      background: rgba(13, 8, 25, 0.72);
-      border: 1px solid rgba(192,132,252,0.14);
-      border-radius: 22px;
-      padding: 16px;
-      margin-bottom: 14px;
+    .field textarea { min-height: 88px; resize: vertical; }
+    .cart-item, .admin-item {
+      border: 1px solid #ede9fe; border-radius: 18px; padding: 12px; margin-bottom: 10px; background: #fcfbff;
     }
-
-    label {
-      display: block;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 6px;
-      font-weight: bold;
+    .cart-line { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .qty-controls { display: flex; align-items: center; gap: 8px; }
+    .qty-controls button {
+      width: 34px; height: 34px; border-radius: 10px; border: 0; background: var(--roxo-claro); color: var(--roxo-escuro); font-weight: 800; cursor: pointer;
     }
-
-    input, textarea {
-      width: 100%;
-      border: 1px solid rgba(192,132,252,0.22);
-      background: rgba(255,255,255,0.06);
-      color: #fff;
-      border-radius: 14px;
-      padding: 13px 14px;
-      outline: none;
-      margin-bottom: 12px;
-      font-size: 0.98rem;
+    .resumo {
+      background: linear-gradient(180deg, #faf5ff, #ffffff); border: 1px solid #ede9fe; border-radius: 18px; padding: 14px; margin: 14px 0;
     }
-
-    textarea { min-height: 88px; resize: vertical; }
-
-    .mini {
-      font-size: 0.82rem;
-      color: #e9d5ff;
-      line-height: 1.45;
-      opacity: 0.95;
+    .row-between { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .small { font-size: 13px; color: #5b5570; }
+    .admin-grid { display: grid; gap: 12px; }
+    .admin-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .admin-tab {
+      border: 0; background: var(--roxo-claro); color: var(--roxo-escuro); border-radius: 14px; padding: 12px; font-weight: 800; cursor: pointer;
     }
-
-    .product-admin-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(192,132,252,0.14);
-      padding: 12px;
-      border-radius: 16px;
-      margin-bottom: 10px;
-    }
-
-    .bottom-bar {
-      position: fixed;
-      left: 50%;
-      bottom: 14px;
-      transform: translateX(-50%);
-      width: min(488px, calc(100% - 18px));
-      background: rgba(20,10,38,0.95);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(192,132,252,0.16);
-      border-radius: 24px;
-      padding: 12px;
-      box-shadow: var(--shadow);
-      display: flex;
-      gap: 10px;
-    }
-
-    .bottom-bar .btn { flex: 1; }
+    .admin-tab.active { background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio)); color: white; }
     .hidden { display: none !important; }
-
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-      padding: 16px;
+    .notice {
+      background: #fef3c7; color: #92400e; border-radius: 16px; padding: 12px; font-size: 13px; margin-bottom: 12px;
     }
-
-    .modal {
-      width: 100%;
-      max-width: 420px;
-      background: linear-gradient(180deg, #281247, #150b27);
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(192,132,252,0.18);
-    }
-
-    .modal h3 { margin-top: 0; }
-
-    .toast {
-      position: fixed;
-      top: 74px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(10, 8, 18, 0.96);
-      border: 1px solid rgba(192,132,252,0.18);
-      color: #fff;
-      padding: 12px 16px;
-      border-radius: 14px;
-      z-index: 250;
-      box-shadow: var(--shadow);
-      max-width: 90%;
-      font-size: 0.95rem;
-    }
-
-    .footer-note {
-      padding: 0 16px;
-      margin-top: 20px;
-      color: #e9d5ff;
-      font-size: 0.82rem;
-      line-height: 1.5;
-      opacity: 0.9;
-    }
-
-    @media (max-width: 420px) {
-      .banner {
-        grid-template-columns: 70px 1fr;
-        gap: 12px;
-      }
-      .banner-logo {
-        width: 70px;
-        height: 70px;
-      }
-      .card {
-        grid-template-columns: 88px 1fr;
-      }
-      .product-image {
-        height: 88px;
-      }
-    }
+    .success { background: #dcfce7; color: #166534; }
+    .danger { background: #fee2e2; color: #991b1b; }
+    .footer-note { text-align: center; font-size: 12px; color: #6b6680; padding: 0 16px 24px; }
+    .muted { color: #6b6680; }
+    .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .mini-btn { border: 0; padding: 9px 12px; border-radius: 12px; cursor: pointer; font-weight: 700; background: var(--roxo-claro); color: var(--roxo-escuro); }
   </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="brand">
-      <h1>Delícias Delivery</h1>
-      <span>site híbrido local + Firebase</span>
-    </div>
-    <button class="btn btn-ghost" id="openAdminBtn">Admin</button>
+    <div class="brand-mini">Delícias Delivery</div>
+    <button class="icon-btn" id="openAdminBtn">Admin</button>
   </div>
 
   <section class="hero">
-    <div class="banner">
-      <img id="bannerLogo" class="banner-logo" alt="Logo Delícias Delivery" />
-      <div class="banner-content">
-        <small id="bannerTag">Entrega rápida</small>
-        <h2 id="bannerTitle">Os melhores sabores do dia</h2>
-        <p id="bannerSubtitle">Peça pelo WhatsApp e receba com praticidade.</p>
+    <img class="hero-bg" id="bannerImage" alt="Banner" />
+    <div class="hero-content">
+      <div class="logo-wrap">
+        <img id="logoImage" alt="Logo" />
       </div>
+      <h1 id="storeName">Delícias Delivery</h1>
+      <p id="storeSubtitle">Comida caseira, sabor incrível e pedido fácil no celular.</p>
+      <div class="tag" id="whatsappTag">Pedidos via WhatsApp</div>
     </div>
   </section>
 
-  <div class="status-row">
-    <div class="status-box">
-      <div>
-        <strong>Modo atual</strong><br>
-        <span class="mini" id="syncStatus">Local offline</span>
-      </div>
-      <button class="btn btn-ghost" id="syncNowBtn">Sincronizar</button>
-    </div>
-  </div>
+  <div class="section-title">Cardápio</div>
+  <main class="produtos" id="produtosContainer"></main>
+  <div class="footer-note">Site híbrido: funciona localmente e pode sincronizar com Firebase.</div>
 
-  <section class="section">
-    <h3>Cardápio</h3>
-    <div class="grid" id="productsList"></div>
+  <button class="floating-cart" id="openCartBtn">Carrinho (0)</button>
+
+  <div class="overlay" id="overlay"></div>
+
+  <section class="sheet" id="cartSheet">
+    <div class="sheet-card">
+      <div class="sheet-header">
+        <h2 class="sheet-title">Seu pedido</h2>
+        <button class="close-btn" data-close="cartSheet">Fechar</button>
+      </div>
+      <div id="cartContent"></div>
+    </div>
   </section>
 
-  <section class="admin-panel hidden" id="adminPanel">
-    <h3>Painel de administração</h3>
-
-    <div class="panel-box">
-      <label for="bannerLogoInput">URL da logo/banner</label>
-      <input id="bannerLogoInput" placeholder="Cole a URL da imagem da logo" />
-
-      <label for="whatsappInput">WhatsApp para pedidos</label>
-      <input id="whatsappInput" placeholder="Ex.: 5591999999999" />
-
-      <label for="bannerTitleInput">Título do banner</label>
-      <input id="bannerTitleInput" placeholder="Título principal" />
-
-      <label for="bannerSubtitleInput">Subtítulo do banner</label>
-      <textarea id="bannerSubtitleInput" placeholder="Descrição do banner"></textarea>
-
+  <section class="sheet" id="confirmSheet">
+    <div class="sheet-card">
+      <div class="sheet-header">
+        <h2 class="sheet-title">Confirmar pedido</h2>
+        <button class="close-btn" data-close="confirmSheet">Fechar</button>
+      </div>
+      <div class="field">
+        <label for="clientName">Seu nome</label>
+        <input id="clientName" placeholder="Digite seu nome" />
+      </div>
+      <div class="field">
+        <label for="clientPhone">Telefone</label>
+        <input id="clientPhone" placeholder="(91) 99999-9999" />
+      </div>
+      <div class="field">
+        <label for="clientAddress">Endereço</label>
+        <textarea id="clientAddress" placeholder="Rua, número, bairro e referência"></textarea>
+      </div>
+      <div class="field">
+        <label for="paymentMethod">Forma de pagamento</label>
+        <select id="paymentMethod">
+          <option>Pix</option>
+          <option>Dinheiro</option>
+          <option>Cartão</option>
+        </select>
+      </div>
+      <div class="resumo" id="confirmResumo"></div>
       <div class="actions">
-        <button class="btn btn-primary" id="saveSettingsBtn">Salvar dados</button>
-        <button class="btn btn-success" id="saveAndSyncBtn">Salvar e sincronizar</button>
+        <button class="btn btn-secondary" data-close="confirmSheet">Voltar</button>
+        <button class="btn btn-green" id="sendWhatsAppBtn">Enviar no WhatsApp</button>
       </div>
-      <p class="mini">Quando a configuração do Firebase estiver preenchida, os dados do cardápio, imagens, banner, logo e WhatsApp serão sincronizados para todos os aparelhos.</p>
-    </div>
-
-    <div class="panel-box">
-      <h3 style="margin-top:0;">Produtos</h3>
-      <div id="adminProductsList"></div>
-      <button class="btn btn-ghost" id="addProductBtn">Adicionar produto</button>
-    </div>
-
-    <div class="panel-box">
-      <h3 style="margin-top:0;">Config Firebase</h3>
-      <input id="firebaseApiKey" placeholder="apiKey" />
-      <input id="firebaseAuthDomain" placeholder="authDomain" />
-      <input id="firebaseProjectId" placeholder="projectId" />
-      <input id="firebaseStorageBucket" placeholder="storageBucket" />
-      <input id="firebaseMessagingSenderId" placeholder="messagingSenderId" />
-      <input id="firebaseAppId" placeholder="appId" />
-      <button class="btn btn-primary" id="saveFirebaseConfigBtn">Salvar configuração Firebase</button>
-      <p class="mini">Cole aqui a configuração do seu projeto Firebase. O site funciona localmente mesmo sem Firebase.</p>
     </div>
   </section>
 
-  <p class="footer-note">
-    Este site foi feito para celular. Sem preencher a configuração do Firebase, ele roda no modo local usando o navegador do aparelho.
-  </p>
-
-  <div class="bottom-bar">
-    <button class="btn btn-primary" id="whatsappBtn">Pedir no WhatsApp</button>
-    <button class="btn btn-ghost hidden" id="logoutBtn">Sair do admin</button>
-  </div>
-
-  <div class="overlay hidden" id="loginModal">
-    <div class="modal">
-      <h3>Entrar no painel</h3>
-      <label for="adminUser">Usuário</label>
-      <input id="adminUser" placeholder="Usuário" />
-      <label for="adminPass">Senha</label>
-      <input id="adminPass" type="password" placeholder="Senha" />
-      <div class="actions">
-        <button class="btn btn-primary" id="loginBtn">Entrar</button>
-        <button class="btn btn-ghost" id="closeLoginBtn">Fechar</button>
+  <section class="sheet" id="adminSheet">
+    <div class="sheet-card">
+      <div class="sheet-header">
+        <h2 class="sheet-title">Painel Admin</h2>
+        <button class="close-btn" data-close="adminSheet">Fechar</button>
       </div>
-      <p class="mini">Login atual do painel: usuário <strong>leane</strong> e senha <strong>060923</strong>.</p>
+
+      <div id="adminLoginArea">
+        <div class="notice danger">
+          Login apenas visual/local. Para produção real, use Firebase Authentication e regras do Firestore.
+        </div>
+        <div class="field">
+          <label>Usuário</label>
+          <input id="adminUser" placeholder="Usuário" />
+        </div>
+        <div class="field">
+          <label>Senha</label>
+          <input id="adminPass" type="password" placeholder="Senha" />
+        </div>
+        <button class="btn btn-primary" id="adminLoginBtn">Entrar</button>
+        <div id="adminLoginMsg" class="small" style="margin-top:10px;"></div>
+      </div>
+
+      <div id="adminPanelArea" class="hidden">
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-tab="tab-loja">Loja</button>
+          <button class="admin-tab" data-tab="tab-produtos">Produtos</button>
+          <button class="admin-tab" data-tab="tab-firebase">Firebase</button>
+        </div>
+
+        <div id="tab-loja">
+          <div class="field">
+            <label>Nome da loja</label>
+            <input id="cfgStoreName" />
+          </div>
+          <div class="field">
+            <label>Subtítulo</label>
+            <input id="cfgStoreSubtitle" />
+          </div>
+          <div class="field">
+            <label>WhatsApp (somente números com DDI e DDD)</label>
+            <input id="cfgWhatsapp" placeholder="5591999999999" />
+          </div>
+          <div class="field">
+            <label>URL do banner</label>
+            <input id="cfgBanner" placeholder="https://..." />
+          </div>
+          <div class="field">
+            <label>URL da logo</label>
+            <input id="cfgLogo" placeholder="https://..." />
+          </div>
+          <button class="btn btn-primary" id="saveStoreBtn">Salvar dados da loja</button>
+        </div>
+
+        <div id="tab-produtos" class="hidden">
+          <div class="row-between" style="margin-bottom:12px;">
+            <div>
+              <div style="font-weight:800;color:var(--roxo-escuro)">Produtos</div>
+              <div class="small">Edite nome, preço, imagem e status de venda.</div>
+            </div>
+            <button class="mini-btn" id="addProductBtn">+ Novo</button>
+          </div>
+          <div id="adminProductsList" class="admin-grid"></div>
+          <button class="btn btn-primary" id="saveProductsBtn">Salvar produtos</button>
+        </div>
+
+        <div id="tab-firebase" class="hidden">
+          <div class="notice">
+            Preencha a configuração do Firebase para ativar a sincronização global. Sem isso, o site funciona apenas no modo local.
+          </div>
+          <div class="field"><label>API Key</label><input id="fbApiKey" /></div>
+          <div class="field"><label>Auth Domain</label><input id="fbAuthDomain" /></div>
+          <div class="field"><label>Project ID</label><input id="fbProjectId" /></div>
+          <div class="field"><label>Storage Bucket</label><input id="fbStorageBucket" /></div>
+          <div class="field"><label>Messaging Sender ID</label><input id="fbMessagingSenderId" /></div>
+          <div class="field"><label>App ID</label><input id="fbAppId" /></div>
+          <div class="field"><label>Coleção / documento</label><input id="fbDocPath" placeholder="deliveryConfig/siteData" /></div>
+          <div class="switch-row cart-item">
+            <div>
+              <div style="font-weight:800">Ativar modo Firebase</div>
+              <div class="small">Quando ativo e configurado, carrega e salva dados globais.</div>
+            </div>
+            <input type="checkbox" id="fbEnabled" style="width:22px;height:22px;" />
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" id="testFirebaseBtn">Testar conexão</button>
+            <button class="btn btn-primary" id="saveFirebaseBtn">Salvar config</button>
+          </div>
+          <div class="actions">
+            <button class="btn btn-green" id="pushFirebaseBtn">Enviar dados ao Firebase</button>
+            <button class="btn btn-secondary" id="pullFirebaseBtn">Baixar dados do Firebase</button>
+          </div>
+          <div id="firebaseMsg" class="small" style="margin-top:10px;"></div>
+        </div>
+
+        <div class="actions" style="margin-top:16px;">
+          <button class="btn btn-secondary" id="adminLogoutBtn">Sair</button>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="toast hidden" id="toast"></div>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    const STORAGE_KEY = 'delicias_delivery_data_v1';
+    const ADMIN_STORAGE_KEY = 'delicias_delivery_admin_logged';
 
-  <script type="module">
-    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const STORAGE_KEY = "delicias_delivery_data_v2";
-    const OLD_STORAGE_KEY = "delicias_delivery_data_v1";
-    const AUTH_KEY = "delicias_delivery_admin_logged";
-    const FIREBASE_CONFIG_KEY = "delicias_delivery_firebase_config_v1";
-    const REMOTE_DOC_PATH = { collection: "delivery_data", id: "app" };
-
-    const DEFAULT_BANNER_LOGO = "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=500&q=80";
-    const DEFAULT_PRODUCT_IMAGE = "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80";
-
-    const DEFAULT_DATA = {
-      banner: {
-        tag: "Entrega rápida",
-        title: "Os melhores sabores do dia",
-        subtitle: "Peça pelo WhatsApp e receba com praticidade.",
-        logo: DEFAULT_BANNER_LOGO
+    const defaultData = {
+      store: {
+        name: 'Delícias Delivery',
+        subtitle: 'Comida caseira, sabor incrível e pedido fácil no celular.',
+        whatsapp: '5591999999999',
+        banner: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80',
+        logo: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=400&q=80'
       },
-      whatsapp: "5591999999999",
+      firebase: {
+        enabled: false,
+        apiKey: "AIzaSyDSB9RT94ugjmIp20g_qpPg2UIPHvWW0IA",
+        authDomain: "deliciasdelivery-2ebb5.firebaseapp.com",
+        projectId: "deliciasdelivery-2ebb5",
+        storageBucket: "deliciasdelivery-2ebb5.firebasestorage.app",
+        messagingSenderId: "411760493993",
+        appId: "1:411760493993:web:d9c217a1a8c3924fb0b0b8",
+	measurementId: "G-JDXK1DJSVZ"
+	docPath: 'deliveryConfig/siteData'
+      },
       products: [
-        { id: uid(), name: "Arroz com Galinha", price: 20, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
-        { id: uid(), name: "Vatapá", price: 18, image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" },
-        { id: uid(), name: "Lasanha", price: 22, image: "https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=800&q=80" },
-        { id: uid(), name: "Torta Salgada", price: 10, image: "https://images.unsplash.com/photo-1464306076886-da185f6a9d05?auto=format&fit=crop&w=800&q=80" },
-        { id: uid(), name: "Refrigerante", price: 6, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=800&q=80" }
-      ],
-      updatedAt: new Date().toISOString()
+        { id: uid(), name: 'Arroz com Galinha', price: 22.00, image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Prato caseiro bem servido.' },
+        { id: uid(), name: 'Vatapá', price: 18.00, image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Cremoso e cheio de sabor.' },
+        { id: uid(), name: 'Lasanha', price: 20.00, image: 'https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Camadas caprichadas e gratinadas.' },
+        { id: uid(), name: 'Torta Salgada', price: 12.00, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Ótima para qualquer hora.' },
+        { id: uid(), name: 'Bolo de Chocolate', price: 10.00, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Fofinho e delicioso.' },
+        { id: uid(), name: 'Refrigerante', price: 6.00, image: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Geladinho para acompanhar.' }
+      ]
     };
 
-    let state = loadLocalData();
-    let firebaseConfig = loadFirebaseConfig();
+    let state = loadState();
+    let cart = [];
     let firebaseApp = null;
-    let db = null;
-
-    const productsList = document.getElementById("productsList");
-    const adminProductsList = document.getElementById("adminProductsList");
-    const adminPanel = document.getElementById("adminPanel");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const loginModal = document.getElementById("loginModal");
-    const syncStatus = document.getElementById("syncStatus");
-    const toast = document.getElementById("toast");
+    let firestore = null;
 
     function uid() {
-      return Math.random().toString(36).slice(2, 10);
+      return 'id-' + Math.random().toString(36).slice(2, 10);
     }
 
-    function currency(v) {
-      return Number(v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    function formatBRL(value) {
+      return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function normalizeData(data) {
-      const safe = data && typeof data === "object" ? data : {};
-      safe.banner = safe.banner || {};
-      safe.banner.tag = safe.banner.tag || DEFAULT_DATA.banner.tag;
-      safe.banner.title = safe.banner.title || DEFAULT_DATA.banner.title;
-      safe.banner.subtitle = safe.banner.subtitle || DEFAULT_DATA.banner.subtitle;
-      safe.banner.logo = safe.banner.logo || DEFAULT_DATA.banner.logo;
-      safe.whatsapp = safe.whatsapp || DEFAULT_DATA.whatsapp;
-      safe.products = Array.isArray(safe.products) ? safe.products : DEFAULT_DATA.products;
-      safe.products = safe.products.map((product) => ({
-        id: product.id || uid(),
-        name: product.name || "Produto",
-        price: Number(product.price || 0),
-        image: product.image || DEFAULT_PRODUCT_IMAGE
-      }));
-      safe.updatedAt = safe.updatedAt || new Date().toISOString();
-      return safe;
+    function clone(obj) {
+      return JSON.parse(JSON.stringify(obj));
     }
 
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.remove("hidden");
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => toast.classList.add("hidden"), 2600);
-    }
-
-    function loadLocalData() {
-      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(OLD_STORAGE_KEY);
-      if (!raw) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_DATA));
-        return structuredClone(DEFAULT_DATA);
-      }
+    function loadState() {
       try {
-        const parsed = JSON.parse(raw);
-        const normalized = normalizeData(parsed);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
-        return normalized;
-      } catch {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_DATA));
-        return structuredClone(DEFAULT_DATA);
-      }
-    }
-
-    function saveLocalData() {
-      state = normalizeData(state);
-      state.updatedAt = new Date().toISOString();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      renderAll();
-    }
-
-    function loadFirebaseConfig() {
-      const raw = localStorage.getItem(FIREBASE_CONFIG_KEY);
-      if (!raw) return {
-        apiKey: "AIzaSyDSB9RT94ugjmIp20g_qpPg2UIPHvWW0IA",
-          authDomain: "deliciasdelivery-2ebb5.firebaseapp.com",
-          projectId: "deliciasdelivery-2ebb5",
-          storageBucket: "deliciasdelivery-2ebb5.firebasestorage.app",
-          messagingSenderId: "411760493993",
-          appId: "1:411760493993:web:d9c217a1a8c3924fb0b0b8",
-          measurementId: "G-JDXK1DJSVZ"
-      };
-      try {
-        return JSON.parse(raw);
-      } catch {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return clone(defaultData);
+        const parsed = JSON.parse(saved);
         return {
-          apiKey: "AIzaSyDSB9RT94ugjmIp20g_qpPg2UIPHvWW0IA",
-          authDomain: "deliciasdelivery-2ebb5.firebaseapp.com",
-          projectId: "deliciasdelivery-2ebb5",
-          storageBucket: "deliciasdelivery-2ebb5.firebasestorage.app",
-          messagingSenderId: "411760493993",
-          appId: "1:411760493993:web:d9c217a1a8c3924fb0b0b8",
-          measurementId: "G-JDXK1DJSVZ"
+          store: { ...defaultData.store, ...(parsed.store || {}) },
+          firebase: { ...defaultData.firebase, ...(parsed.firebase || {}) },
+          products: Array.isArray(parsed.products) && parsed.products.length ? parsed.products : clone(defaultData.products)
         };
+      } catch (e) {
+        return clone(defaultData);
       }
     }
 
-    function saveFirebaseConfig() {
-      localStorage.setItem(FIREBASE_CONFIG_KEY, JSON.stringify(firebaseConfig));
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
-    function isFirebaseReady() {
-      return firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId && firebaseConfig.appId;
-    }
-
-    async function setupFirebaseIfPossible() {
-      if (!isFirebaseReady()) {
-        syncStatus.textContent = "Local offline";
-        return false;
-      }
-
-      try {
-        const existing = getApps().find(app => app.name === "delicias-delivery-app");
-        firebaseApp = existing || initializeApp(firebaseConfig, "delicias-delivery-app");
-        db = getFirestore(firebaseApp);
-        syncStatus.textContent = "Firebase conectado";
-        return true;
-      } catch (error) {
-        syncStatus.textContent = "Erro na conexão Firebase";
-        console.error(error);
-        return false;
-      }
-    }
-
-    async function pullRemoteData() {
-      if (!db) return false;
-      try {
-        const ref = doc(db, REMOTE_DOC_PATH.collection, REMOTE_DOC_PATH.id);
-        const snapshot = await getDoc(ref);
-        if (snapshot.exists()) {
-          state = normalizeData(snapshot.data());
-          saveLocalData();
-          showToast("Dados atualizados do Firebase");
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error(error);
-        showToast("Não foi possível baixar os dados");
-        return false;
-      }
-    }
-
-    async function pushRemoteData() {
-      if (!db) {
-        showToast("Preencha a configuração do Firebase primeiro");
-        return false;
-      }
-      try {
-        const ref = doc(db, REMOTE_DOC_PATH.collection, REMOTE_DOC_PATH.id);
-        state = normalizeData(state);
-        await setDoc(ref, state);
-        syncStatus.textContent = "Sincronizado com Firebase";
-        showToast("Dados sincronizados com sucesso");
-        return true;
-      } catch (error) {
-        console.error(error);
-        showToast("Erro ao sincronizar com Firebase");
-        return false;
-      }
-    }
-
-    function renderBanner() {
-      document.getElementById("bannerTag").textContent = state.banner.tag || "Entrega rápida";
-      document.getElementById("bannerTitle").textContent = state.banner.title || "Delícias Delivery";
-      document.getElementById("bannerSubtitle").textContent = state.banner.subtitle || "Peça pelo WhatsApp";
-      document.getElementById("bannerLogo").src = state.banner.logo || DEFAULT_BANNER_LOGO;
-      document.getElementById("bannerTitleInput").value = state.banner.title || "";
-      document.getElementById("bannerSubtitleInput").value = state.banner.subtitle || "";
-      document.getElementById("bannerLogoInput").value = state.banner.logo || "";
-      document.getElementById("whatsappInput").value = state.whatsapp || "";
+    function renderStore() {
+      document.getElementById('storeName').textContent = state.store.name || 'Delícias Delivery';
+      document.getElementById('storeSubtitle').textContent = state.store.subtitle || '';
+      document.getElementById('whatsappTag').textContent = state.store.whatsapp ? 'Pedidos via WhatsApp • ' + state.store.whatsapp : 'Pedidos via WhatsApp';
+      document.getElementById('bannerImage').src = state.store.banner || '';
+      document.getElementById('logoImage').src = state.store.logo || '';
     }
 
     function renderProducts() {
-      productsList.innerHTML = "";
-      state.products.forEach(product => {
-        const div = document.createElement("div");
-        div.className = "card";
-        div.innerHTML = `
-          <img class="product-image" src="${escapeAttribute(product.image || DEFAULT_PRODUCT_IMAGE)}" alt="${escapeAttribute(product.name)}" onerror="this.src='${DEFAULT_PRODUCT_IMAGE}'">
-          <div>
-            <div class="product-top">
+      const container = document.getElementById('produtosContainer');
+      const activeProducts = state.products.filter(p => p.active);
+      if (!activeProducts.length) {
+        container.innerHTML = '<div class="card"><div class="card-body"><h3 class="produto-nome">Nenhum item disponível</h3><p class="descricao">Ative produtos no painel admin para exibir aqui.</p></div></div>';
+        return;
+      }
+
+      container.innerHTML = activeProducts.map(p => `
+        <article class="card">
+          <img class="img-produto" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" />
+          <div class="card-body">
+            <div class="produto-topo">
               <div>
-                <h4 class="product-title">${escapeHtml(product.name)}</h4>
-                <div class="price">${currency(product.price)}</div>
+                <h3 class="produto-nome">${escapeHtml(p.name)}</h3>
+                <p class="descricao">${escapeHtml(p.desc || 'Produto delicioso do nosso cardápio.')}</p>
               </div>
+              <div class="produto-preco">${formatBRL(p.price)}</div>
             </div>
             <div class="actions">
-              <button class="btn btn-primary" data-order="${product.id}">Pedir agora</button>
+              <button class="btn btn-primary" onclick="addToCart('${p.id}')">Adicionar</button>
             </div>
           </div>
-        `;
-        productsList.appendChild(div);
-      });
+        </article>
+      `).join('');
+    }
 
-      document.querySelectorAll("[data-order]").forEach(btn => {
-        btn.onclick = () => orderProduct(btn.getAttribute("data-order"));
-      });
+    function addToCart(id) {
+      const product = state.products.find(p => p.id === id && p.active);
+      if (!product) return;
+      const existing = cart.find(item => item.id === id);
+      if (existing) existing.qty += 1;
+      else cart.push({ id: product.id, name: product.name, price: Number(product.price), qty: 1 });
+      renderCartButton();
+      renderCart();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+      renderCartButton();
+      renderCart();
+      renderConfirmResumo();
+    }
+
+    function getCartTotal() {
+      return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    }
+
+    function renderCartButton() {
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('openCartBtn').textContent = `Carrinho (${totalQty})`;
+    }
+
+    function renderCart() {
+      const content = document.getElementById('cartContent');
+      if (!cart.length) {
+        content.innerHTML = '<div class="cart-item"><div style="font-weight:800;color:var(--roxo-escuro)">Seu carrinho está vazio.</div><div class="small">Adicione itens do cardápio para continuar.</div></div>';
+        return;
+      }
+
+      content.innerHTML = `
+        ${cart.map(item => `
+          <div class="cart-item">
+            <div class="cart-line">
+              <div>
+                <div style="font-weight:800">${escapeHtml(item.name)}</div>
+                <div class="small">${formatBRL(item.price)} cada</div>
+              </div>
+              <div style="font-weight:800">${formatBRL(item.price * item.qty)}</div>
+            </div>
+            <div class="row-between" style="margin-top:10px;">
+              <div class="qty-controls">
+                <button onclick="changeQty('${item.id}', -1)">-</button>
+                <strong>${item.qty}</strong>
+                <button onclick="changeQty('${item.id}', 1)">+</button>
+              </div>
+              <button class="mini-btn" onclick="changeQty('${item.id}', -999)">Remover</button>
+            </div>
+          </div>
+        `).join('')}
+        <div class="resumo">
+          <div class="row-between"><strong>Total</strong><strong>${formatBRL(getCartTotal())}</strong></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-secondary" onclick="clearCart()">Limpar</button>
+          <button class="btn btn-green" onclick="openConfirm()">Continuar</button>
+        </div>
+      `;
+    }
+
+    function clearCart() {
+      cart = [];
+      renderCartButton();
+      renderCart();
+      renderConfirmResumo();
+    }
+
+    function renderConfirmResumo() {
+      const box = document.getElementById('confirmResumo');
+      if (!cart.length) {
+        box.innerHTML = '<div class="small">Seu carrinho está vazio.</div>';
+        return;
+      }
+      box.innerHTML = `
+        <div style="font-weight:800;color:var(--roxo-escuro);margin-bottom:8px;">Resumo do pedido</div>
+        ${cart.map(item => `<div class="row-between small"><span>${item.qty}x ${escapeHtml(item.name)}</span><strong>${formatBRL(item.price * item.qty)}</strong></div>`).join('')}
+        <hr style="border:0;border-top:1px solid #e9d5ff;margin:12px 0;" />
+        <div class="row-between"><strong>Total</strong><strong>${formatBRL(getCartTotal())}</strong></div>
+      `;
+    }
+
+    function buildWhatsAppText() {
+      const name = document.getElementById('clientName').value.trim();
+      const phone = document.getElementById('clientPhone').value.trim();
+      const address = document.getElementById('clientAddress').value.trim();
+      const payment = document.getElementById('paymentMethod').value;
+      if (!name || !address) {
+        alert('Preencha pelo menos nome e endereço para continuar.');
+        return null;
+      }
+      const lines = [
+        `*Novo pedido - ${state.store.name}*`,
+        '',
+        '*Itens:*',
+        ...cart.map(item => `- ${item.qty}x ${item.name} (${formatBRL(item.price * item.qty)})`),
+        '',
+        `*Total:* ${formatBRL(getCartTotal())}`,
+        `*Nome:* ${name}`,
+        `*Telefone:* ${phone || 'Não informado'}`,
+        `*Endereço:* ${address}`,
+        `*Pagamento:* ${payment}`,
+      ];
+      return lines.join('\n');
+    }
+
+    function sendToWhatsApp() {
+      if (!cart.length) {
+        alert('Adicione itens ao carrinho primeiro.');
+        return;
+      }
+      const text = buildWhatsAppText();
+      if (!text) return;
+      const phone = (state.store.whatsapp || '').replace(/\D/g, '');
+      if (!phone) {
+        alert('Configure o WhatsApp no painel admin.');
+        return;
+      }
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    function openSheet(id) {
+      document.getElementById('overlay').classList.add('show');
+      document.getElementById(id).classList.add('show');
+    }
+
+    function closeSheet(id) {
+      document.getElementById(id).classList.remove('show');
+      if (![...document.querySelectorAll('.sheet')].some(el => el.classList.contains('show'))) {
+        document.getElementById('overlay').classList.remove('show');
+      }
+    }
+
+    function openConfirm() {
+      if (!cart.length) return;
+      renderConfirmResumo();
+      closeSheet('cartSheet');
+      openSheet('confirmSheet');
+    }
+
+    function escapeHtml(text) {
+      return String(text ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function showAdmin(login) {
+      document.getElementById('adminLoginArea').classList.toggle('hidden', login);
+      document.getElementById('adminPanelArea').classList.toggle('hidden', !login);
+      if (login) populateAdmin();
+    }
+
+    function populateAdmin() {
+      document.getElementById('cfgStoreName').value = state.store.name || '';
+      document.getElementById('cfgStoreSubtitle').value = state.store.subtitle || '';
+      document.getElementById('cfgWhatsapp').value = state.store.whatsapp || '';
+      document.getElementById('cfgBanner').value = state.store.banner || '';
+      document.getElementById('cfgLogo').value = state.store.logo || '';
+
+      document.getElementById('fbApiKey').value = state.firebase.apiKey || '';
+      document.getElementById('fbAuthDomain').value = state.firebase.authDomain || '';
+      document.getElementById('fbProjectId').value = state.firebase.projectId || '';
+      document.getElementById('fbStorageBucket').value = state.firebase.storageBucket || '';
+      document.getElementById('fbMessagingSenderId').value = state.firebase.messagingSenderId || '';
+      document.getElementById('fbAppId').value = state.firebase.appId || '';
+      document.getElementById('fbDocPath').value = state.firebase.docPath || 'deliveryConfig/siteData';
+      document.getElementById('fbEnabled').checked = !!state.firebase.enabled;
+      renderAdminProducts();
     }
 
     function renderAdminProducts() {
-      adminProductsList.innerHTML = "";
-      state.products.forEach(product => {
-        const row = document.createElement("div");
-        row.className = "product-admin-item";
-        row.innerHTML = `
-          <label>Nome do produto</label>
-          <input data-name="${product.id}" value="${escapeAttribute(product.name)}" />
-          <label>Preço</label>
-          <input data-price="${product.id}" type="number" step="0.01" value="${product.price}" />
-          <label>URL da imagem</label>
-          <input data-image="${product.id}" value="${escapeAttribute(product.image || DEFAULT_PRODUCT_IMAGE)}" placeholder="Cole a URL da imagem do item" />
-          <button class="btn btn-danger" data-delete="${product.id}">Remover</button>
-        `;
-        adminProductsList.appendChild(row);
-      });
+      const list = document.getElementById('adminProductsList');
+      list.innerHTML = state.products.map((p, index) => `
+        <div class="admin-item">
+          <div class="field"><label>Nome</label><input data-product="${p.id}" data-field="name" value="${escapeHtml(p.name)}"></div>
+          <div class="field"><label>Preço</label><input data-product="${p.id}" data-field="price" type="number" step="0.01" value="${Number(p.price)}"></div>
+          <div class="field"><label>Descrição</label><input data-product="${p.id}" data-field="desc" value="${escapeHtml(p.desc || '')}"></div>
+          <div class="field"><label>URL da imagem</label><input data-product="${p.id}" data-field="image" value="${escapeHtml(p.image)}"></div>
+          <div class="switch-row">
+            <label style="margin:0;font-weight:700;">Ativo para venda</label>
+            <input data-product="${p.id}" data-field="active" type="checkbox" ${p.active ? 'checked' : ''}>
+          </div>
+          <div class="actions" style="margin-top:12px;">
+            <button class="btn btn-red" onclick="removeProduct('${p.id}')">Excluir</button>
+          </div>
+        </div>
+      `).join('');
+    }
 
-      document.querySelectorAll("[data-name]").forEach(input => {
-        input.oninput = () => {
-          const item = state.products.find(p => p.id === input.dataset.name);
-          if (item) item.name = input.value;
-        };
-      });
-
-      document.querySelectorAll("[data-price]").forEach(input => {
-        input.oninput = () => {
-          const item = state.products.find(p => p.id === input.dataset.price);
-          if (item) item.price = Number(input.value || 0);
-        };
-      });
-
-      document.querySelectorAll("[data-image]").forEach(input => {
-        input.oninput = () => {
-          const item = state.products.find(p => p.id === input.dataset.image);
-          if (item) item.image = input.value.trim() || DEFAULT_PRODUCT_IMAGE;
-        };
-      });
-
-      document.querySelectorAll("[data-delete]").forEach(btn => {
-        btn.onclick = () => {
-          state.products = state.products.filter(p => p.id !== btn.dataset.delete);
-          renderAdminProducts();
-          renderProducts();
+    function collectAdminProducts() {
+      state.products = state.products.map(product => {
+        const getField = (field) => document.querySelector(`[data-product="${product.id}"][data-field="${field}"]`);
+        return {
+          ...product,
+          name: getField('name').value.trim() || product.name,
+          price: Number(getField('price').value || product.price),
+          desc: getField('desc').value.trim(),
+          image: getField('image').value.trim() || product.image,
+          active: getField('active').checked
         };
       });
     }
 
-    function renderFirebaseInputs() {
-      document.getElementById("firebaseApiKey").value = firebaseConfig.apiKey || "";
-      document.getElementById("firebaseAuthDomain").value = firebaseConfig.authDomain || "";
-      document.getElementById("firebaseProjectId").value = firebaseConfig.projectId || "";
-      document.getElementById("firebaseStorageBucket").value = firebaseConfig.storageBucket || "";
-      document.getElementById("firebaseMessagingSenderId").value = firebaseConfig.messagingSenderId || "";
-      document.getElementById("firebaseAppId").value = firebaseConfig.appId || "";
-    }
-
-    function renderAuth() {
-      const logged = localStorage.getItem(AUTH_KEY) === "true";
-      adminPanel.classList.toggle("hidden", !logged);
-      logoutBtn.classList.toggle("hidden", !logged);
-    }
-
-    function renderSyncStatus() {
-      if (isFirebaseReady()) {
-        syncStatus.textContent = db ? "Firebase conectado" : "Firebase configurado";
-      } else {
-        syncStatus.textContent = "Local offline";
-      }
-    }
-
-    function renderAll() {
-      renderBanner();
-      renderProducts();
+    function removeProduct(id) {
+      state.products = state.products.filter(p => p.id !== id);
       renderAdminProducts();
-      renderFirebaseInputs();
-      renderAuth();
-      renderSyncStatus();
     }
 
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function escapeAttribute(str) {
-      return escapeHtml(str).replace(/\"/g, "&quot;");
-    }
-
-    function orderProduct(productId) {
-      const product = state.products.find(p => p.id === productId);
-      const phone = String(state.whatsapp || "").replace(/\D/g, "");
-      if (!product) return;
-      if (!phone) {
-        showToast("Cadastre o WhatsApp no painel admin");
-        return;
-      }
-      const message = encodeURIComponent(`Olá! Quero pedir: ${product.name} - ${currency(product.price)}`);
-      window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
-    }
-
-    document.getElementById("whatsappBtn").onclick = () => {
-      const phone = String(state.whatsapp || "").replace(/\D/g, "");
-      if (!phone) {
-        showToast("Cadastre o WhatsApp no painel admin");
-        return;
-      }
-      const message = encodeURIComponent("Olá! Quero fazer um pedido no Delícias Delivery.");
-      window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
-    };
-
-    document.getElementById("openAdminBtn").onclick = () => loginModal.classList.remove("hidden");
-    document.getElementById("closeLoginBtn").onclick = () => loginModal.classList.add("hidden");
-
-    document.getElementById("loginBtn").onclick = () => {
-      const user = document.getElementById("adminUser").value.trim();
-      const pass = document.getElementById("adminPass").value.trim();
-      if (user === "leane" && pass === "060923") {
-        localStorage.setItem(AUTH_KEY, "true");
-        loginModal.classList.add("hidden");
-        renderAuth();
-        showToast("Login realizado com sucesso");
-      } else {
-        showToast("Usuário ou senha inválidos");
-      }
-    };
-
-    logoutBtn.onclick = () => {
-      localStorage.removeItem(AUTH_KEY);
-      renderAuth();
-      showToast("Você saiu do painel");
-    };
-
-    document.getElementById("addProductBtn").onclick = () => {
-      state.products.push({ id: uid(), name: "Novo produto", price: 0, image: DEFAULT_PRODUCT_IMAGE });
+    function addProduct() {
+      state.products.push({ id: uid(), name: 'Novo Produto', price: 0, image: '', active: true, desc: '' });
       renderAdminProducts();
+    }
+
+    function saveStoreData() {
+      state.store.name = document.getElementById('cfgStoreName').value.trim() || state.store.name;
+      state.store.subtitle = document.getElementById('cfgStoreSubtitle').value.trim();
+      state.store.whatsapp = document.getElementById('cfgWhatsapp').value.trim();
+      state.store.banner = document.getElementById('cfgBanner').value.trim();
+      state.store.logo = document.getElementById('cfgLogo').value.trim();
+      saveState();
+      renderStore();
+      alert('Dados da loja salvos com sucesso.');
+    }
+
+    function saveProductsData() {
+      collectAdminProducts();
+      saveState();
       renderProducts();
-    };
+      alert('Produtos salvos com sucesso.');
+    }
 
-    document.getElementById("saveSettingsBtn").onclick = () => {
-      state.whatsapp = document.getElementById("whatsappInput").value.trim();
-      state.banner.logo = document.getElementById("bannerLogoInput").value.trim() || DEFAULT_BANNER_LOGO;
-      state.banner.title = document.getElementById("bannerTitleInput").value.trim() || "Delícias Delivery";
-      state.banner.subtitle = document.getElementById("bannerSubtitleInput").value.trim() || "Peça pelo WhatsApp";
-      saveLocalData();
-      showToast("Dados salvos no aparelho");
-    };
+    function saveFirebaseConfig() {
+      state.firebase.enabled = document.getElementById('fbEnabled').checked;
+      state.firebase.apiKey = document.getElementById('fbApiKey').value.trim();
+      state.firebase.authDomain = document.getElementById('fbAuthDomain').value.trim();
+      state.firebase.projectId = document.getElementById('fbProjectId').value.trim();
+      state.firebase.storageBucket = document.getElementById('fbStorageBucket').value.trim();
+      state.firebase.messagingSenderId = document.getElementById('fbMessagingSenderId').value.trim();
+      state.firebase.appId = document.getElementById('fbAppId').value.trim();
+      state.firebase.docPath = document.getElementById('fbDocPath').value.trim() || 'deliveryConfig/siteData';
+      saveState();
+      setFirebaseMsg('Configuração salva localmente.', 'success');
+    }
 
-    document.getElementById("saveAndSyncBtn").onclick = async () => {
-      state.whatsapp = document.getElementById("whatsappInput").value.trim();
-      state.banner.logo = document.getElementById("bannerLogoInput").value.trim() || DEFAULT_BANNER_LOGO;
-      state.banner.title = document.getElementById("bannerTitleInput").value.trim() || "Delícias Delivery";
-      state.banner.subtitle = document.getElementById("bannerSubtitleInput").value.trim() || "Peça pelo WhatsApp";
-      saveLocalData();
-      if (!db) {
-        const ok = await setupFirebaseIfPossible();
-        if (!ok) return;
+    function setFirebaseMsg(msg, type='') {
+      const el = document.getElementById('firebaseMsg');
+      el.className = 'notice ' + (type || '');
+      el.textContent = msg;
+    }
+
+    function getFirebaseDocRef() {
+      const cfg = state.firebase;
+      if (!cfg.apiKey || !cfg.projectId || !cfg.appId || !cfg.docPath) {
+        throw new Error('Configuração incompleta.');
       }
-      await pushRemoteData();
-    };
-
-    document.getElementById("saveFirebaseConfigBtn").onclick = async () => {
-      firebaseConfig = {
-        apiKey: document.getElementById("firebaseApiKey").value.trim(),
-        authDomain: document.getElementById("firebaseAuthDomain").value.trim(),
-        projectId: document.getElementById("firebaseProjectId").value.trim(),
-        storageBucket: document.getElementById("firebaseStorageBucket").value.trim(),
-        messagingSenderId: document.getElementById("firebaseMessagingSenderId").value.trim(),
-        appId: document.getElementById("firebaseAppId").value.trim(),
-      };
-      saveFirebaseConfig();
-      db = null;
-      firebaseApp = null;
-      const ok = await setupFirebaseIfPossible();
-      if (ok) showToast("Firebase configurado com sucesso");
-      else showToast("Configuração salva, mas a conexão falhou");
-      renderSyncStatus();
-    };
-
-    document.getElementById("syncNowBtn").onclick = async () => {
-      if (!db) {
-        const ok = await setupFirebaseIfPossible();
-        if (!ok) {
-          showToast("Sem Firebase configurado. Usando modo local.");
-          return;
-        }
+      if (!firebaseApp) {
+        firebaseApp = firebase.initializeApp({
+          apiKey: cfg.apiKey,
+          authDomain: cfg.authDomain,
+          projectId: cfg.projectId,
+          storageBucket: cfg.storageBucket,
+          messagingSenderId: cfg.messagingSenderId,
+          appId: cfg.appId
+        }, 'delicias-' + cfg.projectId);
+        firestore = firebase.firestore(firebaseApp);
       }
-      const pulled = await pullRemoteData();
-      if (!pulled) {
-        await pushRemoteData();
+      const parts = cfg.docPath.split('/').filter(Boolean);
+      if (parts.length !== 2) throw new Error('Caminho do documento deve ter formato coleção/documento. Ex.: deliveryConfig/siteData');
+      return firestore.collection(parts[0]).doc(parts[1]);
+    }
+
+    async function testFirebase() {
+      try {
+        saveFirebaseConfig();
+        const ref = getFirebaseDocRef();
+        await ref.get();
+        setFirebaseMsg('Conexão com Firebase OK.', 'success');
+      } catch (e) {
+        setFirebaseMsg('Erro ao conectar: ' + e.message, 'danger');
       }
-    };
+    }
 
-    window.addEventListener("online", async () => {
-      if (isFirebaseReady()) {
-        await setupFirebaseIfPossible();
+    async function pushToFirebase() {
+      try {
+        collectAdminProducts();
+        saveStoreDataSilently();
+        saveFirebaseConfig();
+        const ref = getFirebaseDocRef();
+        await ref.set({
+          store: state.store,
+          products: state.products,
+          updatedAt: new Date().toISOString()
+        });
+        setFirebaseMsg('Dados enviados ao Firebase com sucesso.', 'success');
+      } catch (e) {
+        setFirebaseMsg('Erro ao enviar: ' + e.message, 'danger');
       }
-    });
+    }
 
-    renderAll();
+    async function pullFromFirebase() {
+      try {
+        saveFirebaseConfig();
+        const ref = getFirebaseDocRef();
+        const snap = await ref.get();
+        if (!snap.exists) throw new Error('Documento não encontrado no Firestore.');
+        const data = snap.data() || {};
+        state.store = { ...state.store, ...(data.store || {}) };
+        state.products = Array.isArray(data.products) && data.products.length ? data.products : state.products;
+        saveState();
+        populateAdmin();
+        renderStore();
+        renderProducts();
+        setFirebaseMsg('Dados baixados do Firebase com sucesso.', 'success');
+      } catch (e) {
+        setFirebaseMsg('Erro ao baixar: ' + e.message, 'danger');
+      }
+    }
 
-    if (isFirebaseReady()) {
-      setupFirebaseIfPossible().then(async ok => {
-        if (ok) {
-          await pullRemoteData();
+    function saveStoreDataSilently() {
+      state.store.name = document.getElementById('cfgStoreName').value.trim() || state.store.name;
+      state.store.subtitle = document.getElementById('cfgStoreSubtitle').value.trim();
+      state.store.whatsapp = document.getElementById('cfgWhatsapp').value.trim();
+      state.store.banner = document.getElementById('cfgBanner').value.trim();
+      state.store.logo = document.getElementById('cfgLogo').value.trim();
+      saveState();
+      renderStore();
+    }
+
+    function setAdminLogged(logged) {
+      localStorage.setItem(ADMIN_STORAGE_KEY, logged ? '1' : '0');
+    }
+
+    function isAdminLogged() {
+      return localStorage.getItem(ADMIN_STORAGE_KEY) === '1';
+    }
+
+    function setupTabs() {
+      document.querySelectorAll('.admin-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          ['tab-loja','tab-produtos','tab-firebase'].forEach(id => document.getElementById(id).classList.add('hidden'));
+          document.getElementById(btn.dataset.tab).classList.remove('hidden');
+        });
+      });
+    }
+
+    function attachEvents() {
+      document.getElementById('openAdminBtn').addEventListener('click', () => {
+        showAdmin(isAdminLogged());
+        openSheet('adminSheet');
+      });
+      document.getElementById('openCartBtn').addEventListener('click', () => {
+        renderCart();
+        openSheet('cartSheet');
+      });
+      document.querySelectorAll('[data-close]').forEach(btn => {
+        btn.addEventListener('click', () => closeSheet(btn.dataset.close));
+      });
+      document.getElementById('overlay').addEventListener('click', () => {
+        document.querySelectorAll('.sheet.show').forEach(el => el.classList.remove('show'));
+        document.getElementById('overlay').classList.remove('show');
+      });
+      document.getElementById('sendWhatsAppBtn').addEventListener('click', sendToWhatsApp);
+      document.getElementById('adminLoginBtn').addEventListener('click', () => {
+        const u = document.getElementById('adminUser').value.trim();
+        const p = document.getElementById('adminPass').value.trim();
+        if (u === 'leane' && p === '060923') {
+          setAdminLogged(true);
+          showAdmin(true);
+          document.getElementById('adminLoginMsg').textContent = '';
+        } else {
+          document.getElementById('adminLoginMsg').textContent = 'Usuário ou senha inválidos.';
         }
       });
+      document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+        setAdminLogged(false);
+        showAdmin(false);
+      });
+      document.getElementById('saveStoreBtn').addEventListener('click', saveStoreData);
+      document.getElementById('saveProductsBtn').addEventListener('click', saveProductsData);
+      document.getElementById('addProductBtn').addEventListener('click', addProduct);
+      document.getElementById('saveFirebaseBtn').addEventListener('click', saveFirebaseConfig);
+      document.getElementById('testFirebaseBtn').addEventListener('click', testFirebase);
+      document.getElementById('pushFirebaseBtn').addEventListener('click', pushToFirebase);
+      document.getElementById('pullFirebaseBtn').addEventListener('click', pullFromFirebase);
     }
+
+    async function autoLoadFirebase() {
+      if (!state.firebase.enabled) return;
+      try {
+        const ref = getFirebaseDocRef();
+        const snap = await ref.get();
+        if (!snap.exists) return;
+        const data = snap.data() || {};
+        if (data.store) state.store = { ...state.store, ...data.store };
+        if (Array.isArray(data.products) && data.products.length) state.products = data.products;
+        saveState();
+        renderStore();
+        renderProducts();
+      } catch (e) {
+        console.warn('Firebase não carregado:', e.message);
+      }
+    }
+
+    setupTabs();
+    attachEvents();
+    renderStore();
+    renderProducts();
+    renderCartButton();
+    renderConfirmResumo();
+    autoLoadFirebase();
+
+    window.addToCart = addToCart;
+    window.changeQty = changeQty;
+    window.clearCart = clearCart;
+    window.openConfirm = openConfirm;
+    window.removeProduct = removeProduct;
   </script>
 </body>
 </html>
