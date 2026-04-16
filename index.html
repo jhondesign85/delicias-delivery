@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Delícias Delivery</title>
+  <title>Delícias Delivery - Firebase Auth</title>
   <meta name="theme-color" content="#5b21b6" />
   <style>
     :root {
@@ -22,114 +22,416 @@
     }
 
     * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background: linear-gradient(180deg, #faf7ff 0%, #f5f3ff 100%); color: var(--texto); }
-    body { max-width: 520px; margin: 0 auto; min-height: 100vh; position: relative; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #faf7ff 0%, #f5f3ff 100%);
+      color: var(--texto);
+    }
+    body {
+      max-width: 520px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+    }
     button, input, textarea, select { font: inherit; }
+    img { display: block; }
+
     .topbar {
-      position: sticky; top: 0; z-index: 20;
-      background: rgba(255,255,255,0.92); backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
       border-bottom: var(--borda);
-      padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .brand-mini { font-weight: 800; color: var(--roxo-escuro); }
+
+    .brand-mini {
+      font-weight: 800;
+      color: var(--roxo-escuro);
+    }
+
     .icon-btn {
-      border: 0; background: var(--roxo-escuro); color: var(--branco); border-radius: 12px;
-      padding: 10px 12px; cursor: pointer; box-shadow: var(--sombra); font-weight: 700;
+      border: 0;
+      background: var(--roxo-escuro);
+      color: var(--branco);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      font-weight: 700;
     }
+
     .hero {
-      padding: 16px; margin: 0 12px; margin-top: 12px;
-      border-radius: 26px; overflow: hidden; box-shadow: var(--sombra); position: relative;
-      background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo), var(--rosa)); color: white;
+      padding: 16px;
+      margin: 12px;
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      position: relative;
+      background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo), var(--rosa));
+      color: white;
     }
+
     .hero::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.22)); pointer-events: none;
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.22));
+      pointer-events: none;
     }
+
     .hero-bg {
-      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.2;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.2;
     }
-    .hero-content { position: relative; z-index: 1; }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
     .logo-wrap {
-      width: 88px; height: 88px; border-radius: 22px; background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center; overflow: hidden;
+      width: 88px;
+      height: 88px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
-    .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .hero h1 { margin: 14px 0 6px; font-size: 30px; line-height: 1.05; }
-    .hero p { margin: 0; opacity: 0.96; }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero h1 {
+      margin: 14px 0 6px;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 0;
+      opacity: 0.96;
+    }
+
     .hero .tag {
-      display: inline-block; margin-top: 12px; background: rgba(255,255,255,0.18); padding: 8px 12px; border-radius: 999px;
-      font-size: 13px; font-weight: 700;
+      display: inline-block;
+      margin-top: 12px;
+      background: rgba(255,255,255,0.18);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
     }
-    .section-title { padding: 18px 16px 10px; font-weight: 800; font-size: 20px; color: var(--roxo-escuro); }
-    .produtos { padding: 0 12px 120px; display: grid; gap: 14px; }
+
+    .section-title {
+      padding: 18px 16px 10px;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--roxo-escuro);
+    }
+
+    .produtos {
+      padding: 0 12px 120px;
+      display: grid;
+      gap: 14px;
+    }
+
     .card {
-      background: var(--branco); border-radius: 22px; overflow: hidden; box-shadow: var(--sombra); border: var(--borda);
+      background: var(--branco);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      border: var(--borda);
     }
-    .img-produto { width: 100%; height: 190px; object-fit: cover; display: block; background: #eee; }
+
+    .img-produto {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      background: #eee;
+    }
+
     .card-body { padding: 14px; }
-    .produto-topo { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; }
-    .produto-nome { font-size: 19px; font-weight: 800; margin: 0 0 6px; }
-    .produto-preco { color: var(--roxo); font-weight: 800; font-size: 18px; }
-    .actions { display: flex; gap: 10px; margin-top: 14px; }
-    .btn {
-      flex: 1; border: 0; border-radius: 14px; padding: 12px 14px; font-weight: 800; cursor: pointer;
+
+    .produto-topo {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: flex-start;
     }
+
+    .produto-nome {
+      font-size: 19px;
+      font-weight: 800;
+      margin: 0 0 6px;
+    }
+
+    .produto-preco {
+      color: var(--roxo);
+      font-weight: 800;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    .descricao {
+      margin: 0;
+      color: #5b5570;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      flex: 1;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
     .btn-primary { background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio)); color: white; }
     .btn-secondary { background: var(--roxo-claro); color: var(--roxo-escuro); }
     .btn-green { background: var(--verde); color: white; }
     .btn-red { background: var(--vermelho); color: white; }
     .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
     .floating-cart {
-      position: fixed; right: 18px; bottom: 18px; z-index: 30; background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio));
-      color: white; border: 0; border-radius: 18px; padding: 14px 18px; box-shadow: var(--sombra); cursor: pointer; font-weight: 800;
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio));
+      color: white;
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 18px;
+      box-shadow: var(--sombra);
+      cursor: pointer;
+      font-weight: 800;
     }
-    .panel, .sheet, .overlay { position: fixed; inset: 0; z-index: 60; }
-    .overlay { background: rgba(15, 10, 30, 0.55); display: none; }
+
+    .overlay,
+    .sheet {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+    }
+
+    .overlay {
+      background: rgba(15, 10, 30, 0.55);
+      display: none;
+    }
+
     .overlay.show { display: block; }
-    .sheet { display: none; align-items: flex-end; justify-content: center; padding: 12px; }
+
+    .sheet {
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 12px;
+    }
+
     .sheet.show { display: flex; }
+
     .sheet-card {
-      width: 100%; max-width: 520px; max-height: 92vh; overflow: auto; background: white; border-radius: 24px 24px 16px 16px;
-      box-shadow: var(--sombra); padding: 18px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 92vh;
+      overflow: auto;
+      background: white;
+      border-radius: 24px 24px 16px 16px;
+      box-shadow: var(--sombra);
+      padding: 18px;
     }
-    .sheet-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
-    .sheet-title { font-size: 22px; font-weight: 800; color: var(--roxo-escuro); margin: 0; }
-    .close-btn { border: 0; background: var(--roxo-claro); color: var(--roxo-escuro); padding: 10px 12px; border-radius: 12px; font-weight: 800; cursor: pointer; }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .sheet-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--roxo-escuro);
+      margin: 0;
+    }
+
+    .close-btn {
+      border: 0;
+      background: var(--roxo-claro);
+      color: var(--roxo-escuro);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
     .field { margin-bottom: 12px; }
-    .field label { display: block; font-size: 13px; margin-bottom: 6px; color: #4b3f65; font-weight: 700; }
-    .field input, .field textarea, .field select {
-      width: 100%; border: 1px solid #ddd6fe; border-radius: 14px; padding: 12px; background: #fcfbff;
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #4b3f65;
+      font-weight: 700;
     }
-    .field textarea { min-height: 88px; resize: vertical; }
-    .cart-item, .admin-item {
-      border: 1px solid #ede9fe; border-radius: 18px; padding: 12px; margin-bottom: 10px; background: #fcfbff;
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1px solid #ddd6fe;
+      border-radius: 14px;
+      padding: 12px;
+      background: #fcfbff;
     }
-    .cart-line { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
-    .qty-controls { display: flex; align-items: center; gap: 8px; }
+
+    .field textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .cart-item,
+    .admin-item {
+      border: 1px solid #ede9fe;
+      border-radius: 18px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fcfbff;
+    }
+
+    .cart-line,
+    .row-between {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .qty-controls button {
-      width: 34px; height: 34px; border-radius: 10px; border: 0; background: var(--roxo-claro); color: var(--roxo-escuro); font-weight: 800; cursor: pointer;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 0;
+      background: var(--roxo-claro);
+      color: var(--roxo-escuro);
+      font-weight: 800;
+      cursor: pointer;
     }
+
     .resumo {
-      background: linear-gradient(180deg, #faf5ff, #ffffff); border: 1px solid #ede9fe; border-radius: 18px; padding: 14px; margin: 14px 0;
+      background: linear-gradient(180deg, #faf5ff, #ffffff);
+      border: 1px solid #ede9fe;
+      border-radius: 18px;
+      padding: 14px;
+      margin: 14px 0;
     }
-    .row-between { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
     .small { font-size: 13px; color: #5b5570; }
-    .admin-grid { display: grid; gap: 12px; }
-    .admin-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-    .admin-tab {
-      border: 0; background: var(--roxo-claro); color: var(--roxo-escuro); border-radius: 14px; padding: 12px; font-weight: 800; cursor: pointer;
-    }
-    .admin-tab.active { background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio)); color: white; }
+    .muted { color: #6b6680; }
     .hidden { display: none !important; }
+
     .notice {
-      background: #f3f4f6; color: #1f2937; border-radius: 16px; padding: 12px; font-size: 13px; margin-bottom: 12px;
+      background: #f3e8ff;
+      color: #5b21b6;
+      border-radius: 16px;
+      padding: 12px;
+      font-size: 13px;
+      margin-bottom: 12px;
     }
+
     .success { background: #dcfce7; color: #166534; }
     .danger { background: #fee2e2; color: #991b1b; }
-    .footer-note { text-align: center; font-size: 12px; color: #6b6680; padding: 0 16px 24px; }
-    .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .mini-btn { border: 0; padding: 9px 12px; border-radius: 12px; cursor: pointer; font-weight: 700; background: var(--roxo-claro); color: var(--roxo-escuro); }
+
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: #6b6680;
+      padding: 0 16px 24px;
+    }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .mini-btn {
+      border: 0;
+      padding: 9px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      background: var(--roxo-claro);
+      color: var(--roxo-escuro);
+    }
+
+    .admin-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .admin-tab {
+      border: 0;
+      background: var(--roxo-claro);
+      color: var(--roxo-escuro);
+      border-radius: 14px;
+      padding: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .admin-tab.active {
+      background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio));
+      color: white;
+    }
+
+    .status-bar {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #5b5570;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
@@ -147,12 +449,13 @@
       <h1 id="storeName">Delícias Delivery</h1>
       <p id="storeSubtitle">Comida caseira, sabor incrível e pedido fácil no celular.</p>
       <div class="tag" id="whatsappTag">Pedidos via WhatsApp</div>
+      <div class="status-bar" id="syncStatus">Sincronizando dados...</div>
     </div>
   </section>
 
   <div class="section-title">Cardápio</div>
   <main class="produtos" id="produtosContainer"></main>
-  <div class="footer-note">Site híbrido: funciona localmente e pode sincronizar com Firebase em tempo real.</div>
+  <div class="footer-note">Admin protegido com Firebase Authentication e vitrine atualizada em tempo real.</div>
 
   <button class="floating-cart" id="openCartBtn">Carrinho (0)</button>
 
@@ -210,26 +513,27 @@
       </div>
 
       <div id="adminLoginArea">
-        <div class="notice danger">
-          Login apenas visual/local. Para produção real, use Firebase Authentication e regras do Firestore.
+        <div class="notice">
+          Entre com o e-mail e a senha cadastrados no Firebase Authentication para liberar o painel.
         </div>
         <div class="field">
-          <label>Usuário</label>
-          <input id="adminUser" placeholder="Usuário" />
+          <label for="adminEmail">E-mail do admin</label>
+          <input id="adminEmail" type="email" placeholder="admin@seudominio.com" />
         </div>
         <div class="field">
-          <label>Senha</label>
-          <input id="adminPass" type="password" placeholder="Senha" />
+          <label for="adminPass">Senha</label>
+          <input id="adminPass" type="password" placeholder="Sua senha" />
         </div>
-        <button class="btn btn-primary" id="adminLoginBtn">Entrar</button>
+        <button class="btn btn-primary" id="adminLoginBtn">Entrar no admin</button>
         <div id="adminLoginMsg" class="small" style="margin-top:10px;"></div>
       </div>
 
       <div id="adminPanelArea" class="hidden">
+        <div class="notice success" id="adminUserInfo">Logado.</div>
+
         <div class="admin-tabs">
           <button class="admin-tab active" data-tab="tab-loja">Loja</button>
           <button class="admin-tab" data-tab="tab-produtos">Produtos</button>
-          <button class="admin-tab" data-tab="tab-firebase">Firebase</button>
         </div>
 
         <div id="tab-loja">
@@ -253,7 +557,10 @@
             <label>URL da logo</label>
             <input id="cfgLogo" placeholder="https://..." />
           </div>
-          <button class="btn btn-primary" id="saveStoreBtn">Salvar dados da loja</button>
+          <div class="top-actions">
+            <button class="btn btn-primary" id="saveStoreBtn">Salvar loja</button>
+            <button class="btn btn-secondary" id="reloadStoreBtn">Recarregar</button>
+          </div>
         </div>
 
         <div id="tab-produtos" class="hidden">
@@ -264,51 +571,36 @@
             </div>
             <button class="mini-btn" id="addProductBtn">+ Novo</button>
           </div>
-          <div id="adminProductsList" class="admin-grid"></div>
-          <button class="btn btn-primary" id="saveProductsBtn">Salvar produtos</button>
+          <div id="adminProductsList"></div>
+          <div class="top-actions">
+            <button class="btn btn-primary" id="saveProductsBtn">Salvar produtos</button>
+            <button class="btn btn-secondary" id="reloadProductsBtn">Recarregar</button>
+          </div>
         </div>
 
-        <div id="tab-firebase" class="hidden">
-          <div class="notice">
-            Preencha a configuração do Firebase e ative o modo Firebase para sincronizar em tempo real para todos os clientes.
-          </div>
-          <div class="field"><label>API Key</label><input id="fbApiKey" /></div>
-          <div class="field"><label>Auth Domain</label><input id="fbAuthDomain" /></div>
-          <div class="field"><label>Project ID</label><input id="fbProjectId" /></div>
-          <div class="field"><label>Storage Bucket</label><input id="fbStorageBucket" /></div>
-          <div class="field"><label>Messaging Sender ID</label><input id="fbMessagingSenderId" /></div>
-          <div class="field"><label>App ID</label><input id="fbAppId" /></div>
-          <div class="field"><label>Coleção / documento</label><input id="fbDocPath" placeholder="deliveryConfig/siteData" /></div>
-          <div class="switch-row cart-item">
-            <div>
-              <div style="font-weight:800">Ativar modo Firebase</div>
-              <div class="small">Quando ativo e configurado, o site escuta atualizações em tempo real.</div>
-            </div>
-            <input type="checkbox" id="fbEnabled" style="width:22px;height:22px;" />
-          </div>
-          <div class="actions">
-            <button class="btn btn-secondary" id="testFirebaseBtn">Testar conexão</button>
-            <button class="btn btn-primary" id="saveFirebaseBtn">Salvar config</button>
-          </div>
-          <div class="actions">
-            <button class="btn btn-green" id="pushFirebaseBtn">Enviar dados ao Firebase</button>
-            <button class="btn btn-secondary" id="pullFirebaseBtn">Baixar dados do Firebase</button>
-          </div>
-          <div id="firebaseMsg" class="notice" style="margin-top:10px;">Configure o Firebase para iniciar.</div>
-        </div>
-
-        <div class="actions" style="margin-top:16px;">
+        <div class="top-actions" style="margin-top:16px;">
           <button class="btn btn-secondary" id="adminLogoutBtn">Sair</button>
         </div>
+        <div id="adminPanelMsg" class="small" style="margin-top:10px;"></div>
       </div>
     </div>
   </section>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script>
-    const STORAGE_KEY = 'delicias_delivery_data_v2';
-    const ADMIN_STORAGE_KEY = 'delicias_delivery_admin_logged';
+    const firebaseConfig = {
+      apiKey: "AIzaSyDSB9RT94ugjmIp20g_qpPg2UIPHvWW0IA",
+      authDomain: "deliciasdelivery-2ebb5.firebaseapp.com",
+      projectId: "deliciasdelivery-2ebb5",
+      storageBucket: "deliciasdelivery-2ebb5.firebasestorage.app",
+      messagingSenderId: "411760493993",
+      appId: "1:411760493993:web:d9c217a1a8c3924fb0b0b8"
+    };
+
+    const DOC_COLLECTION = 'deliveryConfig';
+    const DOC_ID = 'siteData';
 
     const defaultData = {
       store: {
@@ -318,77 +610,51 @@
         banner: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80',
         logo: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=400&q=80'
       },
-      firebase: {
-        enabled: false,
-        apiKey: "AIzaSyDSB9RT94ugjmIp20g_qpPg2UIPHvWW0IA",
-        authDomain: "deliciasdelivery-2ebb5.firebaseapp.com",
-        projectId: "deliciasdelivery-2ebb5",
-        storageBucket: "deliciasdelivery-2ebb5.firebasestorage.app",
-        messagingSenderId: "411760493993",
-        appId: "1:411760493993:web:d9c217a1a8c3924fb0b0b8",
-        docPath: 'deliveryConfig/siteData'
-      },
       products: [
         { id: uid(), name: 'Arroz com Galinha', price: 22.00, image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Prato caseiro bem servido.' },
         { id: uid(), name: 'Vatapá', price: 18.00, image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Cremoso e cheio de sabor.' },
         { id: uid(), name: 'Lasanha', price: 20.00, image: 'https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Camadas caprichadas e gratinadas.' },
         { id: uid(), name: 'Torta Salgada', price: 12.00, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Ótima para qualquer hora.' },
-        { id: uid(), name: 'Bolo de Chocolate', price: 10.00, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Fofinho e delicioso.' },
         { id: uid(), name: 'Refrigerante', price: 6.00, image: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Geladinho para acompanhar.' }
       ]
     };
 
-    let state = loadState();
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const siteRef = db.collection(DOC_COLLECTION).doc(DOC_ID);
+
+    let state = clone(defaultData);
     let cart = [];
-    let firebaseApp = null;
-    let firestore = null;
-    let realtimeUnsubscribe = null;
+    let unsubscribeSite = null;
 
     function uid() {
       return 'id-' + Math.random().toString(36).slice(2, 10);
-    }
-
-    function formatBRL(value) {
-      return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
     function clone(obj) {
       return JSON.parse(JSON.stringify(obj));
     }
 
-    function hasFirebaseConfig(cfg) {
-      return !!(cfg && cfg.apiKey && cfg.authDomain && cfg.projectId && cfg.storageBucket && cfg.messagingSenderId && cfg.appId && cfg.docPath);
+    function escapeHtml(text) {
+      return String(text ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
     }
 
-    function loadState() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return clone(defaultData);
-        const parsed = JSON.parse(saved);
-        return {
-          store: { ...defaultData.store, ...(parsed.store || {}) },
-          firebase: { ...defaultData.firebase, ...(parsed.firebase || {}) },
-          products: Array.isArray(parsed.products) && parsed.products.length ? parsed.products : clone(defaultData.products)
-        };
-      } catch (e) {
-        return clone(defaultData);
-      }
-    }
-
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function saveUiStateOnly() {
-      const current = loadState();
-      current.firebase = { ...state.firebase };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+    function formatBRL(value) {
+      return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
     function renderStore() {
       document.getElementById('storeName').textContent = state.store.name || 'Delícias Delivery';
       document.getElementById('storeSubtitle').textContent = state.store.subtitle || '';
-      document.getElementById('whatsappTag').textContent = state.store.whatsapp ? 'Pedidos via WhatsApp • ' + state.store.whatsapp : 'Pedidos via WhatsApp';
+      document.getElementById('whatsappTag').textContent = state.store.whatsapp
+        ? 'Pedidos via WhatsApp • ' + state.store.whatsapp
+        : 'Pedidos via WhatsApp';
       document.getElementById('bannerImage').src = state.store.banner || '';
       document.getElementById('logoImage').src = state.store.logo || '';
     }
@@ -396,8 +662,9 @@
     function renderProducts() {
       const container = document.getElementById('produtosContainer');
       const activeProducts = state.products.filter(p => p.active);
+
       if (!activeProducts.length) {
-        container.innerHTML = '<div class="card"><div class="card-body"><h3 class="produto-nome">Nenhum item disponível</h3><p class="descricao">Ative produtos no painel admin para exibir aqui.</p></div></div>';
+        container.innerHTML = '<div class="card"><div class="card-body"><h3 class="produto-nome">Nenhum item disponível</h3><p class="descricao">Assim que o admin publicar itens, eles aparecerão aqui automaticamente.</p></div></div>';
         return;
       }
 
@@ -420,6 +687,11 @@
       `).join('');
     }
 
+    function renderCartButton() {
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('openCartBtn').textContent = `Carrinho (${totalQty})`;
+    }
+
     function addToCart(id) {
       const product = state.products.find(p => p.id === id && p.active);
       if (!product) return;
@@ -440,13 +712,15 @@
       renderConfirmResumo();
     }
 
-    function getCartTotal() {
-      return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    function clearCart() {
+      cart = [];
+      renderCartButton();
+      renderCart();
+      renderConfirmResumo();
     }
 
-    function renderCartButton() {
-      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-      document.getElementById('openCartBtn').textContent = `Carrinho (${totalQty})`;
+    function getCartTotal() {
+      return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
     }
 
     function renderCart() {
@@ -486,19 +760,13 @@
       `;
     }
 
-    function clearCart() {
-      cart = [];
-      renderCartButton();
-      renderCart();
-      renderConfirmResumo();
-    }
-
     function renderConfirmResumo() {
       const box = document.getElementById('confirmResumo');
       if (!cart.length) {
         box.innerHTML = '<div class="small">Seu carrinho está vazio.</div>';
         return;
       }
+
       box.innerHTML = `
         <div style="font-weight:800;color:var(--roxo-escuro);margin-bottom:8px;">Resumo do pedido</div>
         ${cart.map(item => `<div class="row-between small"><span>${item.qty}x ${escapeHtml(item.name)}</span><strong>${formatBRL(item.price * item.qty)}</strong></div>`).join('')}
@@ -512,10 +780,12 @@
       const phone = document.getElementById('clientPhone').value.trim();
       const address = document.getElementById('clientAddress').value.trim();
       const payment = document.getElementById('paymentMethod').value;
+
       if (!name || !address) {
         alert('Preencha pelo menos nome e endereço para continuar.');
         return null;
       }
+
       const lines = [
         `*Novo pedido - ${state.store.name}*`,
         '',
@@ -528,6 +798,7 @@
         `*Endereço:* ${address}`,
         `*Pagamento:* ${payment}`,
       ];
+
       return lines.join('\n');
     }
 
@@ -536,13 +807,16 @@
         alert('Adicione itens ao carrinho primeiro.');
         return;
       }
+
       const text = buildWhatsAppText();
       if (!text) return;
+
       const phone = (state.store.whatsapp || '').replace(/\D/g, '');
       if (!phone) {
-        alert('Configure o WhatsApp no painel admin.');
+        alert('O WhatsApp da loja ainda não foi configurado.');
         return;
       }
+
       const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
       window.open(url, '_blank');
     }
@@ -566,19 +840,62 @@
       openSheet('confirmSheet');
     }
 
-    function escapeHtml(text) {
-      return String(text ?? '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
+    function setSyncStatus(message, isError = false) {
+      const el = document.getElementById('syncStatus');
+      el.textContent = message;
+      el.style.color = isError ? '#fee2e2' : 'rgba(255,255,255,0.92)';
     }
 
-    function showAdmin(login) {
-      document.getElementById('adminLoginArea').classList.toggle('hidden', login);
-      document.getElementById('adminPanelArea').classList.toggle('hidden', !login);
-      if (login) populateAdmin();
+    function setAdminMessage(message, isError = false) {
+      const el = document.getElementById('adminPanelMsg');
+      el.textContent = message;
+      el.style.color = isError ? '#991b1b' : '#166534';
+    }
+
+    function setLoginMessage(message, isError = false) {
+      const el = document.getElementById('adminLoginMsg');
+      el.textContent = message;
+      el.style.color = isError ? '#991b1b' : '#166534';
+    }
+
+    function applySiteData(data) {
+      state.store = { ...clone(defaultData.store), ...(data.store || {}) };
+      state.products = Array.isArray(data.products) && data.products.length
+        ? data.products
+        : clone(defaultData.products);
+      renderStore();
+      renderProducts();
+      renderConfirmResumo();
+      if (!document.getElementById('adminPanelArea').classList.contains('hidden')) {
+        populateAdmin();
+      }
+    }
+
+    function subscribeToSite() {
+      if (unsubscribeSite) unsubscribeSite();
+      unsubscribeSite = siteRef.onSnapshot((snap) => {
+        if (snap.exists) {
+          applySiteData(snap.data() || {});
+          setSyncStatus('Cardápio online e sincronizado em tempo real.');
+        } else {
+          applySiteData(clone(defaultData));
+          setSyncStatus('Documento ainda vazio. Exibindo dados padrão.');
+        }
+      }, (error) => {
+        console.error(error);
+        applySiteData(clone(defaultData));
+        setSyncStatus('Erro ao sincronizar: ' + error.message, true);
+      });
+    }
+
+    function showAdmin(user) {
+      const logged = !!user;
+      document.getElementById('adminLoginArea').classList.toggle('hidden', logged);
+      document.getElementById('adminPanelArea').classList.toggle('hidden', !logged);
+      if (logged) {
+        document.getElementById('adminUserInfo').textContent = 'Logado como: ' + (user.email || 'admin');
+        populateAdmin();
+      }
     }
 
     function populateAdmin() {
@@ -587,15 +904,6 @@
       document.getElementById('cfgWhatsapp').value = state.store.whatsapp || '';
       document.getElementById('cfgBanner').value = state.store.banner || '';
       document.getElementById('cfgLogo').value = state.store.logo || '';
-
-      document.getElementById('fbApiKey').value = state.firebase.apiKey || '';
-      document.getElementById('fbAuthDomain').value = state.firebase.authDomain || '';
-      document.getElementById('fbProjectId').value = state.firebase.projectId || '';
-      document.getElementById('fbStorageBucket').value = state.firebase.storageBucket || '';
-      document.getElementById('fbMessagingSenderId').value = state.firebase.messagingSenderId || '';
-      document.getElementById('fbAppId').value = state.firebase.appId || '';
-      document.getElementById('fbDocPath').value = state.firebase.docPath || 'deliveryConfig/siteData';
-      document.getElementById('fbEnabled').checked = !!state.firebase.enabled;
       renderAdminProducts();
     }
 
@@ -606,7 +914,7 @@
           <div class="field"><label>Nome</label><input data-product="${p.id}" data-field="name" value="${escapeHtml(p.name)}"></div>
           <div class="field"><label>Preço</label><input data-product="${p.id}" data-field="price" type="number" step="0.01" value="${Number(p.price)}"></div>
           <div class="field"><label>Descrição</label><input data-product="${p.id}" data-field="desc" value="${escapeHtml(p.desc || '')}"></div>
-          <div class="field"><label>URL da imagem</label><input data-product="${p.id}" data-field="image" value="${escapeHtml(p.image)}"></div>
+          <div class="field"><label>URL da imagem</label><input data-product="${p.id}" data-field="image" value="${escapeHtml(p.image || '')}"></div>
           <div class="switch-row">
             <label style="margin:0;font-weight:700;">Ativo para venda</label>
             <input data-product="${p.id}" data-field="active" type="checkbox" ${p.active ? 'checked' : ''}>
@@ -642,139 +950,100 @@
       renderAdminProducts();
     }
 
-    function saveStoreData() {
-      state.store.name = document.getElementById('cfgStoreName').value.trim() || state.store.name;
-      state.store.subtitle = document.getElementById('cfgStoreSubtitle').value.trim();
-      state.store.whatsapp = document.getElementById('cfgWhatsapp').value.trim();
-      state.store.banner = document.getElementById('cfgBanner').value.trim();
-      state.store.logo = document.getElementById('cfgLogo').value.trim();
-      saveState();
-      renderStore();
-      alert('Dados da loja salvos com sucesso.');
-    }
-
-    function saveProductsData() {
+    function getAdminPayload() {
       collectAdminProducts();
-      saveState();
-      renderProducts();
-      alert('Produtos salvos com sucesso.');
+      return {
+        store: {
+          name: document.getElementById('cfgStoreName').value.trim() || 'Delícias Delivery',
+          subtitle: document.getElementById('cfgStoreSubtitle').value.trim(),
+          whatsapp: document.getElementById('cfgWhatsapp').value.trim(),
+          banner: document.getElementById('cfgBanner').value.trim(),
+          logo: document.getElementById('cfgLogo').value.trim()
+        },
+        products: state.products,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedBy: auth.currentUser ? (auth.currentUser.email || '') : ''
+      };
     }
 
-    function saveFirebaseConfig() {
-      state.firebase.enabled = document.getElementById('fbEnabled').checked;
-      state.firebase.apiKey = document.getElementById('fbApiKey').value.trim();
-      state.firebase.authDomain = document.getElementById('fbAuthDomain').value.trim();
-      state.firebase.projectId = document.getElementById('fbProjectId').value.trim();
-      state.firebase.storageBucket = document.getElementById('fbStorageBucket').value.trim();
-      state.firebase.messagingSenderId = document.getElementById('fbMessagingSenderId').value.trim();
-      state.firebase.appId = document.getElementById('fbAppId').value.trim();
-      state.firebase.docPath = document.getElementById('fbDocPath').value.trim() || 'deliveryConfig/siteData';
-      saveUiStateOnly();
-      setFirebaseMsg('Configuração salva localmente.', 'success');
-      restartRealtimeSync();
-    }
-
-    function setFirebaseMsg(msg, type='') {
-      const el = document.getElementById('firebaseMsg');
-      el.className = 'notice ' + (type || '');
-      el.textContent = msg;
-    }
-
-    function getFirebaseDocRef() {
-      const cfg = state.firebase;
-      if (!hasFirebaseConfig(cfg)) {
-        throw new Error('Configuração do Firebase incompleta.');
+    async function saveStoreOnly() {
+      if (!auth.currentUser) {
+        setAdminMessage('Faça login no admin antes de salvar.', true);
+        return;
       }
-
-      const appName = 'delicias-' + cfg.projectId;
-      const existingApp = firebase.apps.find(app => app.name === appName);
-      if (existingApp) {
-        firebaseApp = existingApp;
-      } else {
-        firebaseApp = firebase.initializeApp({
-          apiKey: cfg.apiKey,
-          authDomain: cfg.authDomain,
-          projectId: cfg.projectId,
-          storageBucket: cfg.storageBucket,
-          messagingSenderId: cfg.messagingSenderId,
-          appId: cfg.appId,
-        }, appName);
-      }
-
-      firestore = firebase.firestore(firebaseApp);
-      const parts = cfg.docPath.split('/').filter(Boolean);
-      if (parts.length !== 2) throw new Error('Caminho do documento deve ter formato coleção/documento. Ex.: deliveryConfig/siteData');
-      return firestore.collection(parts[0]).doc(parts[1]);
-    }
-
-    async function testFirebase() {
       try {
-        saveFirebaseConfig();
-        const ref = getFirebaseDocRef();
-        await ref.get();
-        setFirebaseMsg('Conexão com Firebase OK.', 'success');
-      } catch (e) {
-        setFirebaseMsg('Erro ao conectar: ' + e.message, 'danger');
+        const current = getAdminPayload();
+        await siteRef.set({
+          store: current.store,
+          updatedAt: current.updatedAt,
+          updatedBy: current.updatedBy
+        }, { merge: true });
+        setAdminMessage('Dados da loja salvos no Firebase.');
+      } catch (error) {
+        console.error(error);
+        setAdminMessage('Erro ao salvar loja: ' + error.message, true);
       }
     }
 
-    async function pushToFirebase() {
+    async function saveProductsOnly() {
+      if (!auth.currentUser) {
+        setAdminMessage('Faça login no admin antes de salvar.', true);
+        return;
+      }
       try {
-        collectAdminProducts();
-        saveStoreDataSilently();
-        saveFirebaseConfig();
-        const ref = getFirebaseDocRef();
-        await ref.set({
-          store: state.store,
-          products: state.products,
-          updatedAt: new Date().toISOString()
-        });
-        setFirebaseMsg('Dados enviados ao Firebase com sucesso.', 'success');
-      } catch (e) {
-        setFirebaseMsg('Erro ao enviar: ' + e.message, 'danger');
+        const current = getAdminPayload();
+        await siteRef.set({
+          products: current.products,
+          updatedAt: current.updatedAt,
+          updatedBy: current.updatedBy
+        }, { merge: true });
+        setAdminMessage('Produtos salvos no Firebase.');
+      } catch (error) {
+        console.error(error);
+        setAdminMessage('Erro ao salvar produtos: ' + error.message, true);
       }
     }
 
-    async function pullFromFirebase() {
+    async function reloadFromServer() {
       try {
-        saveFirebaseConfig();
-        const ref = getFirebaseDocRef();
-        const snap = await ref.get();
-        if (!snap.exists) throw new Error('Documento não encontrado no Firestore.');
-        applyRemoteData(snap.data() || {});
-        setFirebaseMsg('Dados baixados do Firebase com sucesso.', 'success');
-      } catch (e) {
-        setFirebaseMsg('Erro ao baixar: ' + e.message, 'danger');
+        const snap = await siteRef.get();
+        if (snap.exists) {
+          applySiteData(snap.data() || {});
+          setAdminMessage('Dados recarregados do Firebase.');
+        } else {
+          applySiteData(clone(defaultData));
+          setAdminMessage('Documento ainda não existe.');
+        }
+      } catch (error) {
+        console.error(error);
+        setAdminMessage('Erro ao recarregar: ' + error.message, true);
       }
     }
 
-    function applyRemoteData(data) {
-      state.store = { ...state.store, ...(data.store || {}) };
-      if (Array.isArray(data.products) && data.products.length) {
-        state.products = data.products;
+    async function loginAdmin() {
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPass').value;
+      if (!email || !password) {
+        setLoginMessage('Preencha e-mail e senha.', true);
+        return;
       }
-      saveState();
-      populateAdmin();
-      renderStore();
-      renderProducts();
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        setLoginMessage('Login realizado com sucesso.');
+      } catch (error) {
+        console.error(error);
+        setLoginMessage('Erro no login: ' + error.message, true);
+      }
     }
 
-    function saveStoreDataSilently() {
-      state.store.name = document.getElementById('cfgStoreName').value.trim() || state.store.name;
-      state.store.subtitle = document.getElementById('cfgStoreSubtitle').value.trim();
-      state.store.whatsapp = document.getElementById('cfgWhatsapp').value.trim();
-      state.store.banner = document.getElementById('cfgBanner').value.trim();
-      state.store.logo = document.getElementById('cfgLogo').value.trim();
-      saveState();
-      renderStore();
-    }
-
-    function setAdminLogged(logged) {
-      localStorage.setItem(ADMIN_STORAGE_KEY, logged ? '1' : '0');
-    }
-
-    function isAdminLogged() {
-      return localStorage.getItem(ADMIN_STORAGE_KEY) === '1';
+    async function logoutAdmin() {
+      try {
+        await auth.signOut();
+        setAdminMessage('Sessão encerrada.');
+      } catch (error) {
+        console.error(error);
+        setAdminMessage('Erro ao sair: ' + error.message, true);
+      }
     }
 
     function setupTabs() {
@@ -782,98 +1051,57 @@
         btn.addEventListener('click', () => {
           document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          ['tab-loja','tab-produtos','tab-firebase'].forEach(id => document.getElementById(id).classList.add('hidden'));
+          ['tab-loja', 'tab-produtos'].forEach(id => document.getElementById(id).classList.add('hidden'));
           document.getElementById(btn.dataset.tab).classList.remove('hidden');
         });
       });
     }
 
     function attachEvents() {
-      document.getElementById('openAdminBtn').addEventListener('click', () => {
-        showAdmin(isAdminLogged());
-        openSheet('adminSheet');
-      });
+      document.getElementById('openAdminBtn').addEventListener('click', () => openSheet('adminSheet'));
       document.getElementById('openCartBtn').addEventListener('click', () => {
         renderCart();
         openSheet('cartSheet');
       });
+      document.getElementById('sendWhatsAppBtn').addEventListener('click', sendToWhatsApp);
+      document.getElementById('adminLoginBtn').addEventListener('click', loginAdmin);
+      document.getElementById('adminLogoutBtn').addEventListener('click', logoutAdmin);
+      document.getElementById('saveStoreBtn').addEventListener('click', saveStoreOnly);
+      document.getElementById('saveProductsBtn').addEventListener('click', saveProductsOnly);
+      document.getElementById('reloadStoreBtn').addEventListener('click', reloadFromServer);
+      document.getElementById('reloadProductsBtn').addEventListener('click', reloadFromServer);
+      document.getElementById('addProductBtn').addEventListener('click', addProduct);
+
       document.querySelectorAll('[data-close]').forEach(btn => {
         btn.addEventListener('click', () => closeSheet(btn.dataset.close));
       });
+
       document.getElementById('overlay').addEventListener('click', () => {
         document.querySelectorAll('.sheet.show').forEach(el => el.classList.remove('show'));
         document.getElementById('overlay').classList.remove('show');
       });
-      document.getElementById('sendWhatsAppBtn').addEventListener('click', sendToWhatsApp);
-      document.getElementById('adminLoginBtn').addEventListener('click', () => {
-        const u = document.getElementById('adminUser').value.trim();
-        const p = document.getElementById('adminPass').value.trim();
-        if (u === 'leane' && p === '060923') {
-          setAdminLogged(true);
-          showAdmin(true);
-          document.getElementById('adminLoginMsg').textContent = '';
+    }
+
+    function bootstrap() {
+      setupTabs();
+      attachEvents();
+      renderStore();
+      renderProducts();
+      renderCartButton();
+      renderConfirmResumo();
+      subscribeToSite();
+
+      auth.onAuthStateChanged((user) => {
+        showAdmin(user);
+        if (user) {
+          setLoginMessage('');
         } else {
-          document.getElementById('adminLoginMsg').textContent = 'Usuário ou senha inválidos.';
+          document.getElementById('adminPass').value = '';
         }
       });
-      document.getElementById('adminLogoutBtn').addEventListener('click', () => {
-        setAdminLogged(false);
-        showAdmin(false);
-      });
-      document.getElementById('saveStoreBtn').addEventListener('click', saveStoreData);
-      document.getElementById('saveProductsBtn').addEventListener('click', saveProductsData);
-      document.getElementById('addProductBtn').addEventListener('click', addProduct);
-      document.getElementById('saveFirebaseBtn').addEventListener('click', saveFirebaseConfig);
-      document.getElementById('testFirebaseBtn').addEventListener('click', testFirebase);
-      document.getElementById('pushFirebaseBtn').addEventListener('click', pushToFirebase);
-      document.getElementById('pullFirebaseBtn').addEventListener('click', pullFromFirebase);
     }
 
-    function restartRealtimeSync() {
-      if (typeof realtimeUnsubscribe === 'function') {
-        realtimeUnsubscribe();
-        realtimeUnsubscribe = null;
-      }
-
-      if (!state.firebase.enabled || !hasFirebaseConfig(state.firebase)) {
-        return;
-      }
-
-      try {
-        const ref = getFirebaseDocRef();
-        realtimeUnsubscribe = ref.onSnapshot((snap) => {
-          if (!snap.exists) return;
-          applyRemoteData(snap.data() || {});
-          setFirebaseMsg('Sincronização em tempo real ativa.', 'success');
-        }, (error) => {
-          setFirebaseMsg('Erro na sincronização: ' + error.message, 'danger');
-        });
-      } catch (e) {
-        setFirebaseMsg('Erro ao iniciar sincronização: ' + e.message, 'danger');
-      }
-    }
-
-    async function autoLoadFirebase() {
-      if (!state.firebase.enabled || !hasFirebaseConfig(state.firebase)) return;
-      try {
-        const ref = getFirebaseDocRef();
-        const snap = await ref.get();
-        if (snap.exists) {
-          applyRemoteData(snap.data() || {});
-        }
-        restartRealtimeSync();
-      } catch (e) {
-        console.warn('Firebase não carregado:', e.message);
-      }
-    }
-
-    setupTabs();
-    attachEvents();
-    renderStore();
-    renderProducts();
-    renderCartButton();
-    renderConfirmResumo();
-    autoLoadFirebase();
+    bootstrap();
 
     window.addToCart = addToCart;
     window.changeQty = changeQty;
