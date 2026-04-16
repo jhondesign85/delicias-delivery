@@ -71,8 +71,6 @@
     .produto-topo { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; }
     .produto-nome { font-size: 19px; font-weight: 800; margin: 0 0 6px; }
     .produto-preco { color: var(--roxo); font-weight: 800; font-size: 18px; }
-    .badge-off { background: #fee2e2; color: #991b1b; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
-    .descricao { margin: 0; color: #5b5570; font-size: 14px; }
     .actions { display: flex; gap: 10px; margin-top: 14px; }
     .btn {
       flex: 1; border: 0; border-radius: 14px; padding: 12px 14px; font-weight: 800; cursor: pointer;
@@ -86,14 +84,10 @@
       position: fixed; right: 18px; bottom: 18px; z-index: 30; background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio));
       color: white; border: 0; border-radius: 18px; padding: 14px 18px; box-shadow: var(--sombra); cursor: pointer; font-weight: 800;
     }
-    .panel, .sheet, .overlay {
-      position: fixed; inset: 0; z-index: 60;
-    }
+    .panel, .sheet, .overlay { position: fixed; inset: 0; z-index: 60; }
     .overlay { background: rgba(15, 10, 30, 0.55); display: none; }
     .overlay.show { display: block; }
-    .sheet {
-      display: none; align-items: flex-end; justify-content: center; padding: 12px;
-    }
+    .sheet { display: none; align-items: flex-end; justify-content: center; padding: 12px; }
     .sheet.show { display: flex; }
     .sheet-card {
       width: 100%; max-width: 520px; max-height: 92vh; overflow: auto; background: white; border-radius: 24px 24px 16px 16px;
@@ -129,12 +123,11 @@
     .admin-tab.active { background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio)); color: white; }
     .hidden { display: none !important; }
     .notice {
-      background: #fef3c7; color: #92400e; border-radius: 16px; padding: 12px; font-size: 13px; margin-bottom: 12px;
+      background: #f3f4f6; color: #1f2937; border-radius: 16px; padding: 12px; font-size: 13px; margin-bottom: 12px;
     }
     .success { background: #dcfce7; color: #166534; }
     .danger { background: #fee2e2; color: #991b1b; }
     .footer-note { text-align: center; font-size: 12px; color: #6b6680; padding: 0 16px 24px; }
-    .muted { color: #6b6680; }
     .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .mini-btn { border: 0; padding: 9px 12px; border-radius: 12px; cursor: pointer; font-weight: 700; background: var(--roxo-claro); color: var(--roxo-escuro); }
   </style>
@@ -159,7 +152,7 @@
 
   <div class="section-title">Cardápio</div>
   <main class="produtos" id="produtosContainer"></main>
-  <div class="footer-note">Site híbrido: funciona localmente e pode sincronizar com Firebase.</div>
+  <div class="footer-note">Site híbrido: funciona localmente e pode sincronizar com Firebase em tempo real.</div>
 
   <button class="floating-cart" id="openCartBtn">Carrinho (0)</button>
 
@@ -277,7 +270,7 @@
 
         <div id="tab-firebase" class="hidden">
           <div class="notice">
-            Preencha a configuração do Firebase para ativar a sincronização global. Sem isso, o site funciona apenas no modo local.
+            Preencha a configuração do Firebase e ative o modo Firebase para sincronizar em tempo real para todos os clientes.
           </div>
           <div class="field"><label>API Key</label><input id="fbApiKey" /></div>
           <div class="field"><label>Auth Domain</label><input id="fbAuthDomain" /></div>
@@ -289,7 +282,7 @@
           <div class="switch-row cart-item">
             <div>
               <div style="font-weight:800">Ativar modo Firebase</div>
-              <div class="small">Quando ativo e configurado, carrega e salva dados globais.</div>
+              <div class="small">Quando ativo e configurado, o site escuta atualizações em tempo real.</div>
             </div>
             <input type="checkbox" id="fbEnabled" style="width:22px;height:22px;" />
           </div>
@@ -301,7 +294,7 @@
             <button class="btn btn-green" id="pushFirebaseBtn">Enviar dados ao Firebase</button>
             <button class="btn btn-secondary" id="pullFirebaseBtn">Baixar dados do Firebase</button>
           </div>
-          <div id="firebaseMsg" class="small" style="margin-top:10px;"></div>
+          <div id="firebaseMsg" class="notice" style="margin-top:10px;">Configure o Firebase para iniciar.</div>
         </div>
 
         <div class="actions" style="margin-top:16px;">
@@ -314,7 +307,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script>
-    const STORAGE_KEY = 'delicias_delivery_data_v1';
+    const STORAGE_KEY = 'delicias_delivery_data_v2';
     const ADMIN_STORAGE_KEY = 'delicias_delivery_admin_logged';
 
     const defaultData = {
@@ -326,14 +319,14 @@
         logo: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=400&q=80'
       },
       firebase: {
-        enabled: false,
-        apiKey: '',
-        authDomain: '',
-        projectId: '',
-        storageBucket: '',
-        messagingSenderId: '',
-        appId: '',
-        docPath: 'deliveryConfig/siteData'
+        apiKey: "AIzaSyDSB9RT94ugjmIp20g_qpPg2UIPHvWW0IA",
+        authDomain: "deliciasdelivery-2ebb5.firebaseapp.com",
+        projectId: "deliciasdelivery-2ebb5",
+        storageBucket: "deliciasdelivery-2ebb5.firebasestorage.app",
+        messagingSenderId: "411760493993",
+        appId: "1:411760493993:web:d9c217a1a8c3924fb0b0b8",
+	measurementId: "G-JDXK1DJSVZ"
+	docPath: 'deliveryConfig/siteData'
       },
       products: [
         { id: uid(), name: 'Arroz com Galinha', price: 22.00, image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1200&q=80', active: true, desc: 'Prato caseiro bem servido.' },
@@ -349,6 +342,7 @@
     let cart = [];
     let firebaseApp = null;
     let firestore = null;
+    let realtimeUnsubscribe = null;
 
     function uid() {
       return 'id-' + Math.random().toString(36).slice(2, 10);
@@ -360,6 +354,10 @@
 
     function clone(obj) {
       return JSON.parse(JSON.stringify(obj));
+    }
+
+    function hasFirebaseConfig(cfg) {
+      return !!(cfg && cfg.apiKey && cfg.authDomain && cfg.projectId && cfg.storageBucket && cfg.messagingSenderId && cfg.appId && cfg.docPath);
     }
 
     function loadState() {
@@ -379,6 +377,12 @@
 
     function saveState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function saveUiStateOnly() {
+      const current = loadState();
+      current.firebase = { ...state.firebase };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
     }
 
     function renderStore() {
@@ -597,7 +601,7 @@
 
     function renderAdminProducts() {
       const list = document.getElementById('adminProductsList');
-      list.innerHTML = state.products.map((p, index) => `
+      list.innerHTML = state.products.map((p) => `
         <div class="admin-item">
           <div class="field"><label>Nome</label><input data-product="${p.id}" data-field="name" value="${escapeHtml(p.name)}"></div>
           <div class="field"><label>Preço</label><input data-product="${p.id}" data-field="price" type="number" step="0.01" value="${Number(p.price)}"></div>
@@ -665,8 +669,9 @@
       state.firebase.messagingSenderId = document.getElementById('fbMessagingSenderId').value.trim();
       state.firebase.appId = document.getElementById('fbAppId').value.trim();
       state.firebase.docPath = document.getElementById('fbDocPath').value.trim() || 'deliveryConfig/siteData';
-      saveState();
+      saveUiStateOnly();
       setFirebaseMsg('Configuração salva localmente.', 'success');
+      restartRealtimeSync();
     }
 
     function setFirebaseMsg(msg, type='') {
@@ -677,20 +682,26 @@
 
     function getFirebaseDocRef() {
       const cfg = state.firebase;
-      if (!cfg.apiKey || !cfg.projectId || !cfg.appId || !cfg.docPath) {
-        throw new Error('Configuração incompleta.');
+      if (!hasFirebaseConfig(cfg)) {
+        throw new Error('Configuração do Firebase incompleta.');
       }
-      if (!firebaseApp) {
+
+      const appName = 'delicias-' + cfg.projectId;
+      const existingApp = firebase.apps.find(app => app.name === appName);
+      if (existingApp) {
+        firebaseApp = existingApp;
+      } else {
         firebaseApp = firebase.initializeApp({
-          apiKey: "AIzaSyDSB9RT94ugjmIp20g_qpPg2UIPHvWW0IA",
-          authDomain: "deliciasdelivery-2ebb5.firebaseapp.com",
-          projectId: "deliciasdelivery-2ebb5",
-          storageBucket: "deliciasdelivery-2ebb5.firebasestorage.app",
-          messagingSenderId: "411760493993",
-          appId: "1:411760493993:web:d9c217a1a8c3924fb0b0b8",
-        }, 'delicias-' + cfg.projectId);
-        firestore = firebase.firestore(firebaseApp);
+          apiKey: cfg.apiKey,
+          authDomain: cfg.authDomain,
+          projectId: cfg.projectId,
+          storageBucket: cfg.storageBucket,
+          messagingSenderId: cfg.messagingSenderId,
+          appId: cfg.appId,
+        }, appName);
       }
+
+      firestore = firebase.firestore(firebaseApp);
       const parts = cfg.docPath.split('/').filter(Boolean);
       if (parts.length !== 2) throw new Error('Caminho do documento deve ter formato coleção/documento. Ex.: deliveryConfig/siteData');
       return firestore.collection(parts[0]).doc(parts[1]);
@@ -730,17 +741,22 @@
         const ref = getFirebaseDocRef();
         const snap = await ref.get();
         if (!snap.exists) throw new Error('Documento não encontrado no Firestore.');
-        const data = snap.data() || {};
-        state.store = { ...state.store, ...(data.store || {}) };
-        state.products = Array.isArray(data.products) && data.products.length ? data.products : state.products;
-        saveState();
-        populateAdmin();
-        renderStore();
-        renderProducts();
+        applyRemoteData(snap.data() || {});
         setFirebaseMsg('Dados baixados do Firebase com sucesso.', 'success');
       } catch (e) {
         setFirebaseMsg('Erro ao baixar: ' + e.message, 'danger');
       }
+    }
+
+    function applyRemoteData(data) {
+      state.store = { ...state.store, ...(data.store || {}) };
+      if (Array.isArray(data.products) && data.products.length) {
+        state.products = data.products;
+      }
+      saveState();
+      populateAdmin();
+      renderStore();
+      renderProducts();
     }
 
     function saveStoreDataSilently() {
@@ -813,18 +829,39 @@
       document.getElementById('pullFirebaseBtn').addEventListener('click', pullFromFirebase);
     }
 
+    function restartRealtimeSync() {
+      if (typeof realtimeUnsubscribe === 'function') {
+        realtimeUnsubscribe();
+        realtimeUnsubscribe = null;
+      }
+
+      if (!state.firebase.enabled || !hasFirebaseConfig(state.firebase)) {
+        return;
+      }
+
+      try {
+        const ref = getFirebaseDocRef();
+        realtimeUnsubscribe = ref.onSnapshot((snap) => {
+          if (!snap.exists) return;
+          applyRemoteData(snap.data() || {});
+          setFirebaseMsg('Sincronização em tempo real ativa.', 'success');
+        }, (error) => {
+          setFirebaseMsg('Erro na sincronização: ' + error.message, 'danger');
+        });
+      } catch (e) {
+        setFirebaseMsg('Erro ao iniciar sincronização: ' + e.message, 'danger');
+      }
+    }
+
     async function autoLoadFirebase() {
-      if (!state.firebase.enabled) return;
+      if (!state.firebase.enabled || !hasFirebaseConfig(state.firebase)) return;
       try {
         const ref = getFirebaseDocRef();
         const snap = await ref.get();
-        if (!snap.exists) return;
-        const data = snap.data() || {};
-        if (data.store) state.store = { ...state.store, ...data.store };
-        if (Array.isArray(data.products) && data.products.length) state.products = data.products;
-        saveState();
-        renderStore();
-        renderProducts();
+        if (snap.exists) {
+          applyRemoteData(snap.data() || {});
+        }
+        restartRealtimeSync();
       } catch (e) {
         console.warn('Firebase não carregado:', e.message);
       }
